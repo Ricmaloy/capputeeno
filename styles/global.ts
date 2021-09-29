@@ -13,7 +13,7 @@ const GlobalStyles = createGlobalStyle`
 
     body {
         font-family: Saira, 'Helvetica Neue', sans-serif;
-        background-color: #dEdEdE;
+        background-color: #f0f0f5;
     }
 `
 export default GlobalStyles;
