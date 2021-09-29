@@ -12,7 +12,8 @@ const GlobalStyles = createGlobalStyle`
     }
 
     body {
-        font-family: Saira, 'Helvetica Neue', sans-serif;;
+        font-family: Saira, 'Helvetica Neue', sans-serif;
+        background-color: #dEdEdE;
     }
 `
 export default GlobalStyles;
