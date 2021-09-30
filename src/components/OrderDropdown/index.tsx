@@ -1,0 +1,53 @@
+import { useState } from 'react';
+import { FiChevronDown, FiChevronUp } from 'react-icons/fi'
+import { Container, MainLayer, DropDownMenu, MenuItem } from './styles';
+
+type OrderOptionProps = 'news' | 'ascending' | 'descending' | 'topseller';
+
+interface orderFilterOptionsProps {
+    title: string;
+    order: OrderOptionProps;
+}
+
+const orderFilterOptions: orderFilterOptionsProps[] = [
+    {title: 'Novidades', order: 'news'},
+    {title: 'Preço: Maior - menor', order: 'descending'},
+    {title: 'Preço: Menor - maior', order: 'ascending'},
+    {title: 'Mais vendidos', order: 'topseller'},
+]
+
+export function OrderDropdown() {
+    const [selectedOrderFilter, setSelectedOrderFilter] = useState('none');
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    function handleOpenDropdown() {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
+
+    function handleSelectOrderFilter(orderOption: string) {
+        setSelectedOrderFilter(orderOption);
+        setIsDropdownOpen(false);
+    };
+
+    return (
+        <Container>
+        <MainLayer onClick={handleOpenDropdown} >
+            {orderFilterOptions.find(option => option.order === selectedOrderFilter)?.title || 'Organizar por'}
+            { isDropdownOpen ?  <FiChevronUp/> : <FiChevronDown />}
+        </MainLayer>
+        <DropDownMenu isDropdownMenuOpen={isDropdownOpen} >
+            {
+                orderFilterOptions.map(filterOption => {
+                    return (
+                        <MenuItem 
+                            key={filterOption.order} 
+                            onClick={() => handleSelectOrderFilter(filterOption.order)} 
+                        >
+                            {filterOption.title}
+                        </MenuItem>
+                    )
+                })
+            }
+        </DropDownMenu>
+        </Container>
+    )
+}
