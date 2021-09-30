@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi'
 import { Container, MainLayer, DropDownMenu, MenuItem } from './styles';
 
-const orderFilterOptions = [
+type OrderOptionProps = 'news' | 'ascending' | 'descending' | 'topseller';
+
+interface orderFilterOptionsProps {
+    title: string;
+    order: OrderOptionProps;
+}
+
+const orderFilterOptions: orderFilterOptionsProps[] = [
     {title: 'Novidades', order: 'news'},
     {title: 'Preço: Maior - menor', order: 'descending'},
     {title: 'Preço: Menor - maior', order: 'ascending'},
@@ -10,17 +17,16 @@ const orderFilterOptions = [
 ]
 
 export function OrderDropdown() {
-    const [selectedOrderFilter, setSelectedOrderFilter] = useState('none')
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-
+    const [selectedOrderFilter, setSelectedOrderFilter] = useState('none');
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     function handleOpenDropdown() {
-        setIsDropdownOpen(!isDropdownOpen)
-    }
+        setIsDropdownOpen(!isDropdownOpen);
+    };
 
     function handleSelectOrderFilter(orderOption: string) {
-        setSelectedOrderFilter(orderOption)
-        setIsDropdownOpen(false)
-    }
+        setSelectedOrderFilter(orderOption);
+        setIsDropdownOpen(false);
+    };
 
     return (
         <Container>
@@ -31,18 +37,14 @@ export function OrderDropdown() {
         <DropDownMenu isDropdownMenuOpen={isDropdownOpen} >
             {
                 orderFilterOptions.map(filterOption => {
-                    // if(filterOption.order === selectedOrderFilter) {
-                    //     return
-                    // } else {
-                        return (
-                            <MenuItem 
-                                key={filterOption.order} 
-                                onClick={() => handleSelectOrderFilter(filterOption.order)} 
-                            >
-                                {filterOption.title}
-                            </MenuItem>
-                        )
-                    // }
+                    return (
+                        <MenuItem 
+                            key={filterOption.order} 
+                            onClick={() => handleSelectOrderFilter(filterOption.order)} 
+                        >
+                            {filterOption.title}
+                        </MenuItem>
+                    )
                 })
             }
         </DropDownMenu>
