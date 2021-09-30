@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Container, NavList, NavLink } from './styles';
 
-type  FilterOptionProps = 'all' | 't-shirts' | 'mugs';
+type FilterOptionProps = 'all' | 't-shirts' | 'mugs';
 
 interface filterOptionsListProps {
     title: string,

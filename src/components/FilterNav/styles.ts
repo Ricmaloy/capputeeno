@@ -32,6 +32,7 @@ export const NavLink = styled.li<isActiveLink>`
     text-transform: uppercase;
 
     font-weight: ${props => props.isActive ? '600' : '400'};
+    color: ${props => props.isActive ? '#41414D' : '#737380'};
     border-bottom: ${props => props.isActive ? '4px solid #ffa585' : 'none'};
     cursor: pointer;    
 `
