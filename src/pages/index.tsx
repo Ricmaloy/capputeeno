@@ -1,10 +1,19 @@
+import { FilterNav } from "../components/FilterNav";
 import { Header } from "../components/Header";
+import { OrderDropdown } from "../components/OrderDropdown";
+
+import { Container, FiltersSection } from '../styles/pages/Home'
 
 export default function Home() {
   return (
     <>
       <Header />
-      <h1>Hello Rocketseat!</h1>
+      <Container>
+        <FiltersSection>
+          <FilterNav />
+          <OrderDropdown />
+        </FiltersSection>
+      </Container>
     </>
   )
 }
