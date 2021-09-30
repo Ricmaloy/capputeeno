@@ -37,6 +37,8 @@ export const DropDownMenu = styled.ul<DropdownMenuOpenProps>`
     position: absolute;
     top: 2.5rem;
     right: 0;
+
+    z-index: 2;
 `
 
 export const MenuItem = styled.li`
