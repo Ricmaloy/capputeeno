@@ -2,6 +2,7 @@ import { FilterNav } from "../components/FilterNav";
 import { Header } from "../components/Header";
 import { OrderDropdown } from "../components/OrderDropdown";
 import { Pagination } from "../components/Pagination";
+import { ProductsDisplay } from "../components/ProductsDisplay";
 
 import { Container, FiltersSection } from '../styles/pages/Home'
 
@@ -17,6 +18,11 @@ export default function Home() {
         </FiltersSection>
 
         <Pagination />
+
+        <ProductsDisplay />
+
+        <Pagination />
+
       </Container>
     </>
   )
