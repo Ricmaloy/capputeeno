@@ -1,4 +1,5 @@
 import { FormEvent, useState } from 'react';
+import { useRouter } from 'next/router';
 import { FiShoppingBag, FiSearch } from 'react-icons/fi';
 import { 
     Container, 
@@ -10,6 +11,7 @@ import {
 } from './styles';
 
 export function Header() {
+    const router = useRouter();
     const [searchContent, setSearchContent] = useState('');
 
     function handleSearchItem(event: FormEvent) {
@@ -21,7 +23,7 @@ export function Header() {
     return (
         <Container>
             <Content>
-                <Logo>capputeeno</Logo>
+                <Logo onClick={() => router.push('/')}>capputeeno</Logo>
     
                 <UserInteractive>
                     <form onSubmit={handleSearchItem} >
@@ -39,7 +41,7 @@ export function Header() {
                         </button>
                     </SearchBar>
                     </form>
-                    <Bag>
+                    <Bag onClick={() => router.push('/cart')}>
                         <FiShoppingBag />
                         <span>2</span>
                     </Bag>

@@ -24,6 +24,7 @@ export const Logo = styled.h1`
     font-weight: 400;
 
     color: #5d5d6d;
+    cursor: pointer;
 
     @media(max-width: 780px) {
         font-size: 3.5rem;
