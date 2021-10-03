@@ -1,11 +1,10 @@
-import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { FiShoppingBag } from 'react-icons/fi'
 import { Header } from '../../components/Header';
-import { FiArrowLeftCircle, FiShoppingBag } from 'react-icons/fi'
+import { BackButton } from '../../components/BackButton';
 
 import { 
     Container, 
-    GoBackSection, 
     Content, 
     Descriptions,
     Text,
@@ -13,22 +12,12 @@ import {
 } from '../../styles/pages/Product';
 
 export default function Product() {
-    const router = useRouter();
-
-    function handleGoBack() {
-        router.back();
-    }
-
     return (
         <>  
             <Header />
             <Container>
-
             
-            <GoBackSection onClick={handleGoBack} >
-                <FiArrowLeftCircle/>
-                <p>Voltar</p>
-            </GoBackSection>
+            <BackButton />
 
             <Content>
                 <Image

@@ -1,11 +1,9 @@
-import { useRouter } from 'next/router';
-import { FiArrowLeftCircle } from 'react-icons/fi';
-import { CartItemCard } from '../../components/CartItemCard';
 import { Header } from '../../components/Header';
+import { BackButton } from '../../components/BackButton';
+import { CartItemCard } from '../../components/CartItemCard';
 
 import { 
     Container, 
-    GoBackSection, 
     CheckoutContainer, 
     CheckoutTitle, 
     CheckoutSection, 
@@ -49,11 +47,6 @@ const Bag = [
 ]
 
 export default function Cart() {
-    const router = useRouter();
-
-    function handleGoBack() {
-        router.back();
-    }
 
     return (
         <>
@@ -62,10 +55,7 @@ export default function Cart() {
 
                 <BagList>
 
-                    <GoBackSection onClick={handleGoBack} >
-                        <FiArrowLeftCircle/>
-                        <p>Voltar</p>
-                    </GoBackSection>
+                    <BackButton />
 
                     <h1>seu carrinho</h1>
 
