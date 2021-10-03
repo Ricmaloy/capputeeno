@@ -8,14 +8,21 @@ export const Container = styled.div`
     display: grid;
     grid-template-columns: 1fr 35.2rem;
     column-gap: 3.2rem;
+
+    @media(max-width: 1200px) {
+        padding: 0 2.5rem;
+        grid-template-columns: 1fr;
+    }
 `
-export const GoBackSection = styled.div`
+export const GoBackSection = styled.button`
     width: fit-content;
     height: fit-content;
+    font-family: Saira;
 
     color: #617480;
     margin-bottom: 2.2rem;
-    cursor: pointer;
+    border: none;
+    background-color: transparent;
 
     display: flex;
     align-items: center;
@@ -30,6 +37,7 @@ export const GoBackSection = styled.div`
     }
 `
 export const CheckoutContainer = styled.div`
+    max-height: 70rem;
     background-color: #ffffff;
     padding: 1.6rem 2.4rem;
     margin-top: 1.5rem;
@@ -83,7 +91,7 @@ export const CheckoutButton = styled.button`
     border-radius: 0.4rem;
     background-color: #51b853;
     margin-top: 4rem;
-    margin-bottom: 28.1rem;
+    margin-bottom: 27rem;
     color: #F5F5Fa;
 
     cursor: pointer;
@@ -91,6 +99,10 @@ export const CheckoutButton = styled.button`
 
     &:hover {
         filter: brightness(0.9);
+    }
+
+    @media(max-width: 1200px) {
+        margin-bottom: 2rem;
     }
 `
 
@@ -105,4 +117,42 @@ export const CheckoutLink = styled.p`
     & + & {
         margin-top: 1.2rem;
     }
+`
+
+export const BagList = styled.div`
+    h1 {
+        font-size: 2.4rem;
+        font-weight: 500;
+        line-height: 3.6rem;
+        text-transform: uppercase;
+        color: #41414d;
+    }
+`
+
+export const BagPrice = styled.div`
+    display: flex;
+    gap: 0.3rem;
+
+    margin-top: 0.6rem;
+
+    p {
+        font-size: 1.6rem;
+        font-weight: 300;
+        line-height: 2.4rem;
+        color: #41414D;
+    }
+
+    span {
+        font-size: 1.6rem;
+        font-weight: 600;
+        line-height: 2.4rem;
+        color: #41414D;
+    }
+`
+
+export const BagItemsList = styled.div`
+    margin-top: 2.3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
 `
