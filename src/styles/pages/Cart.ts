@@ -14,28 +14,7 @@ export const Container = styled.div`
         grid-template-columns: 1fr;
     }
 `
-export const GoBackSection = styled.button`
-    width: fit-content;
-    height: fit-content;
-    font-family: Saira;
 
-    color: #617480;
-    margin-bottom: 2.2rem;
-    border: none;
-    background-color: transparent;
-
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    svg {
-        font-size: 1.8rem;
-    }
-
-    p {
-        font-size: 1.4rem;
-    }
-`
 export const CheckoutContainer = styled.div`
     max-height: 70rem;
     background-color: #ffffff;

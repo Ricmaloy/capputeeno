@@ -21,25 +21,6 @@ export const Container = styled.div`
         padding: 0 2.5rem;
     }
 `
-export const GoBackSection = styled.div`
-    width: fit-content;
-
-    color: #617480;
-    margin-bottom: 2.2rem;
-    cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    svg {
-        font-size: 1.8rem;
-    }
-
-    p {
-        font-size: 1.4rem;
-    }
-`
 
 export const Content = styled.main`
     display: flex;
