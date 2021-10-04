@@ -1,15 +1,18 @@
-import { useState } from 'react';
 import { FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 import { Container,ItemContainer } from './styles';
 
-export function Pagination() {
-    const [selectedPage, setSelectedPage] = useState(1);
-    const [pagesQuantity, setPagesQuantity] = useState(5);
+interface Pagination {
+    selectedPage: number,
+    totalPages: number,
+    handleOnChangePage: (newPage: number) => void,
+}
 
-    const pages = [... Array(pagesQuantity)].map((page, index) => index + 1);
+export function Pagination({selectedPage, totalPages, handleOnChangePage}: Pagination) {
+
+    const pages = [... Array(totalPages)].map((_, index) => index + 1);
 
     function handleChangePage(newSelectedPage: number) {
-        setSelectedPage(newSelectedPage);
+        handleOnChangePage(newSelectedPage);
     }
 
     return (
@@ -28,7 +31,7 @@ export function Pagination() {
                }) 
             }
             <ItemContainer onClick={() => handleChangePage(selectedPage - 1)} isItemDisabled={selectedPage === 1} ><FiChevronLeft/></ItemContainer>
-            <ItemContainer onClick={() => handleChangePage(selectedPage + 1)} isItemDisabled={selectedPage === pagesQuantity}><FiChevronRight/></ItemContainer>
+            <ItemContainer onClick={() => handleChangePage(selectedPage + 1)} isItemDisabled={selectedPage === totalPages}><FiChevronRight/></ItemContainer>
         </Container>
     )
 }
