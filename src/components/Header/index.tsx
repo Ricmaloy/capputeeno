@@ -18,6 +18,7 @@ export function Header() {
         event.preventDefault()
 
         // redirecionar para uma página com os resultados da busca
+        router.push(`/search/${searchContent}`);
     }
 
     return (
