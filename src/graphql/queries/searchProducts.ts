@@ -3,8 +3,8 @@ query GET_PRODUCTS($page: Int, $perPage: Int, $sortField: String, $sortOrder: St
     allProducts(page: $page, perPage: $perPage, sortOrder: $sortOrder, filter:{ name: $sortField }) {
       id
       name
-      image_url
-      price_in_cents
+      imageUrl: image_url
+      priceInCents: price_in_cents
       category
     }
     _allProductsMeta(perPage: $perPage, page: $page) {
