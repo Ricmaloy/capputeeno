@@ -6,35 +6,44 @@ import client from "../../graphql/client"
 import SEARCH_PRODUCTS from "../../graphql/queries/searchProducts"
 import { Container, Title, Subtitle } from "../../styles/pages/Search"
 
-interface ProductsProps {
+interface ProductProps {
     id: string,
     name: string,
     imageUrl: string,
-    priceInCents: string,
+    priceInCents: number,
     category: string,
+}
+
+interface ProductsProps {
+    products: ProductProps[]
     count: number,
     slug: string
 }
 
 export default function Products({ 
-    id, 
-    name, 
-    imageUrl, 
-    priceInCents, 
-    category, 
+    products,
     count = 0,
     slug
 }: ProductsProps) {
+    
     return (
         <>
             <Header /> 
             <Container>
                 <Title>Você pesquisou por: <span>{slug}</span></Title>
-                <Subtitle>Encontramos <span>{count}</span> produtos para você !</Subtitle>
+                {
+                    products.length > 0 ? (
+                        <>
+                            <Subtitle>Encontramos <span>{count}</span> produtos para você !</Subtitle>
 
-                <Pagination />
-                <ProductsDisplay />
-                <Pagination />
+                            <Pagination />
+                            <ProductsDisplay products={products} />
+                            <Pagination />
+                        </>
+                    ) : (
+                        <Subtitle>Não encontramos nenhum que condiz com sua busca, <span>tente algo diferente.</span></Subtitle>
+                    )
+                }
             </Container>
         </>
     )
@@ -58,7 +67,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
     return {
         props: {
-            ...allProducts,
+            products: allProducts,
             count,
             slug
         }
