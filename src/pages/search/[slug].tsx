@@ -6,6 +6,7 @@ import { ProductsDisplay } from "../../components/ProductsDisplay"
 import client from "../../graphql/client"
 import SEARCH_PRODUCTS from "../../graphql/queries/searchProducts"
 import { Container, Title, Subtitle } from "../../styles/pages/Search"
+import { formatPagesCount } from "../../utils/formatPagesCount"
 
 interface ProductProps {
     id: string,
@@ -26,10 +27,10 @@ export default function Products({
     count,
     slug
 }: ProductsProps) {
-    const [productsList, setProductsList] = useState(products)
-    const [selectedPage, setSelectedPage] = useState(1);
+    const [productsList, setProductsList] = useState(products);
+    const [selectedPage, setSelectedPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
-    const [resultsCount, setResultsCount] = useState(count);
+    const [resultsCount, setResultsCount] = useState(formatPagesCount(count));
 
     async function handleChangePage(newPage: number) {
         if(newPage === totalPages) return;
@@ -59,7 +60,7 @@ export default function Products({
 
             setProductsList(allProducts);
             setResultsCount(_allProductsMeta.count);
-            setTotalPages(_allProductsMeta.count/5);
+            formatPagesCount(_allProductsMeta.count);
         }
 
         getData()
