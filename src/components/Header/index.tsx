@@ -19,6 +19,7 @@ export function Header() {
 
         // redirecionar para uma página com os resultados da busca
         router.push(`/search/${searchContent}`);
+        setSearchContent('')
     }
 
     return (

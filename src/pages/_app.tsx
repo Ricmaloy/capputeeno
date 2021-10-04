@@ -1,5 +1,6 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { StoreContextProvider } from '../contexts/storeContext';
 
 import GlobalStyles from '../styles/global';
 
@@ -14,8 +15,10 @@ function MyApp({ Component, pageProps }: AppProps) {
             content="Projeto de desafio front end by Rocketseat"
           />
         </Head>
-        <GlobalStyles />
-        <Component {...pageProps} />
+        <StoreContextProvider>
+          <GlobalStyles />
+          <Component {...pageProps} />
+        </StoreContextProvider>
       </>
       )
 }
