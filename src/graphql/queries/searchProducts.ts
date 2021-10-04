@@ -7,7 +7,7 @@ query GET_PRODUCTS($page: Int, $perPage: Int, $sortField: String, $sortOrder: St
       priceInCents: price_in_cents
       category
     }
-    _allProductsMeta(perPage: $perPage, page: $page) {
+    _allProductsMeta(perPage: $perPage, page: $page, , filter:{ name: $sortField }) {
       count
     }
 } 
