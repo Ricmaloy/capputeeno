@@ -1,4 +1,5 @@
 import { GetServerSideProps } from "next"
+import { useEffect, useState } from "react"
 import { Header } from "../../components/Header"
 import { Pagination } from "../../components/Pagination"
 import { ProductsDisplay } from "../../components/ProductsDisplay"
@@ -22,9 +23,47 @@ interface ProductsProps {
 
 export default function Products({ 
     products,
-    count = 0,
+    count,
     slug
 }: ProductsProps) {
+    const [productsList, setProductsList] = useState(products)
+    const [selectedPage, setSelectedPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [resultsCount, setResultsCount] = useState(count);
+
+    async function handleChangePage(newPage: number) {
+        if(newPage === totalPages) return;
+
+        setSelectedPage(newPage);
+
+        const updatedVars = {
+            page: newPage,
+            perPage: 12,
+            sortOrder: '',
+            sortField: slug,
+        }
+
+        const { allProducts } =  await client.request(SEARCH_PRODUCTS, updatedVars);
+
+        setProductsList(allProducts);
+    }
+
+    useEffect(() => {
+        async function getData() {
+            const { allProducts, _allProductsMeta } =  await client.request(SEARCH_PRODUCTS, {
+                page: 0,
+                perPage: 12,
+                sortOrder: '',
+                sortField: slug,
+            });
+
+            setProductsList(allProducts);
+            setResultsCount(_allProductsMeta.count);
+            setTotalPages(_allProductsMeta.count/5);
+        }
+
+        getData()
+    }, [slug])
     
     return (
         <>
@@ -32,13 +71,13 @@ export default function Products({
             <Container>
                 <Title>Você pesquisou por: <span>{slug}</span></Title>
                 {
-                    products.length > 0 ? (
+                    productsList.length > 0 ? (
                         <>
-                            <Subtitle>Encontramos <span>{count}</span> produtos para você !</Subtitle>
+                            <Subtitle>Encontramos <span>{resultsCount}</span> produtos para você !</Subtitle>
 
-                            <Pagination />
+                            <Pagination selectedPage={selectedPage} totalPages={totalPages} handleOnChangePage={handleChangePage} />
                             <ProductsDisplay products={products} />
-                            <Pagination />
+                            <Pagination selectedPage={selectedPage} totalPages={totalPages} handleOnChangePage={handleChangePage} />
                         </>
                     ) : (
                         <Subtitle>Não encontramos nenhum que condiz com sua busca, <span>tente algo diferente.</span></Subtitle>
