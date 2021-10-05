@@ -40,8 +40,6 @@ export async function getProducts(sortField: FilterOptionProps, sortOrder: Order
 
     const { allProducts, _allProductsMeta } = await client.request(UNIQUE_GET_PRODUCTS, vars);
 
-    console.log(allProducts)
-
     return {
         products: allProducts,
         count: _allProductsMeta.count
