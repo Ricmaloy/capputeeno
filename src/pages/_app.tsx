@@ -1,10 +1,22 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { useState } from 'react';
+import { QueryClientProvider, QueryClient } from 'react-query';
+
 import { StoreContextProvider } from '../contexts/storeContext';
+import { Hydrate } from 'react-query/hydration';
 
 import GlobalStyles from '../styles/global';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [queryClient] = useState(() => new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 1000 * 60 * 10,
+          },
+        },
+    }))
+
   return (
       <>
         <Head>
@@ -15,10 +27,14 @@ function MyApp({ Component, pageProps }: AppProps) {
             content="Projeto de desafio front end by Rocketseat"
           />
         </Head>
-        <StoreContextProvider>
-          <GlobalStyles />
-          <Component {...pageProps} />
-        </StoreContextProvider>
+        <QueryClientProvider client={queryClient} >
+          <Hydrate state={pageProps.dehydratedState}>
+            <StoreContextProvider>
+              <GlobalStyles />
+              <Component {...pageProps} />
+            </StoreContextProvider>
+          </Hydrate>
+        </QueryClientProvider>
       </>
       )
 }

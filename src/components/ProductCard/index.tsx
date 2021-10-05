@@ -1,5 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link';
+import { api } from '../../services/axios/api';
+import { queryClient } from '../../services/react-query/queryClient';
 import { formatPrice } from '../../utils/formatPrice';
 import { CardContainer, Details, Title, Divider, Price } from './styles';
 
@@ -12,9 +14,20 @@ interface ProductCardProps {
 }
 
 export function ProductCard({id, name, image_url, price_in_cents}: ProductCardProps) {
+
+    async function handlePrefetchProduct(productId: string) {
+        await queryClient.prefetchQuery(['@capputeeno:product', productId], async () => {
+            const response = await api.get(`products/${productId}`);
+
+            return response.data
+        }, {
+            staleTime: 1000 * 60 * 10
+        })
+    }
+
     return (
         <Link href={`/products/${id}`} passHref>
-            <CardContainer>
+            <CardContainer onMouseEnter={() => handlePrefetchProduct(id)} >
                 <Image 
                     src={image_url}
                     alt={`Image about the product`}

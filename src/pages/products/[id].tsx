@@ -1,41 +1,24 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import client from '../../graphql/client';
 import GET_PRODUCT_BY_ID from '../../graphql/queries/getProductByID';
-import { FiShoppingBag } from 'react-icons/fi'
+import { dehydrate, DehydratedState } from 'react-query/hydration';
+import { QueryClient } from 'react-query';
+
 import { Header } from '../../components/Header';
 import { BackButton } from '../../components/BackButton';
 
-import { 
-    Container, 
-    Content, 
-    Descriptions,
-    Text,
-    AddCartButton
-} from '../../styles/pages/Product';
 import { formatPrice } from '../../utils/formatPrice';
+import { FiShoppingBag } from 'react-icons/fi'
+import {  Container, Content, Descriptions, Text, AddCartButton } from '../../styles/pages/Product';
+import { getProduct, useProduct } from '../../hooks/useProduct';
 
-interface ProductProps {
-    id: string,
-    name: string,
-    description: string,
-    category: string,
-    imageUrl: string,
-    priceInCents: number,
-    sales: number,
-    createdAt: string
-}
+export default function Product() {
+    const router = useRouter();
+    const { id } = router.query;
+    const { data, isLoading, isFetching, error } = useProduct(`${id}`);
 
-export default function Product({
-    id,
-    name,
-    description,
-    category,
-    imageUrl,
-    priceInCents,
-    sales,
-    createdAt
-}: ProductProps) {
     return (
         <>  
             <Header />
@@ -44,11 +27,25 @@ export default function Product({
             <BackButton />
 
             {
-                id ? (
+                isLoading ? (
+                    <h1>Carregando</h1>
+                ) : error ? (
+                    <Content>
+                        <Text
+                            fontSize='3.2rem'
+                            fontWeight='300'
+                            lineHeight='4.8rem'
+                            color='#41414d'
+                            marginTop='1.2rem'
+                        >
+                            Não foi possível encontrar o produto!
+                        </Text>
+                    </Content>
+                ) : (
                     <Content>
                         <Image
-                            src={`${imageUrl}`}
-                            alt={`${description}`}
+                            src={`${data.product.imageUrl}`}
+                            alt={`${data.product.description}`}
                             width={640}
                             height={580}
                             objectFit='fill'
@@ -60,7 +57,7 @@ export default function Product({
                                 lineHeight='2.4rem'
                                 color='#41414d'
                             >
-                                {category === 'mugs' ? 'Caneca' : 'Camiseta'}
+                                {data.product.category === 'mugs' ? 'Caneca' : 'Camiseta'}
                             </Text>
                             <Text
                                 fontSize='3.2rem'
@@ -69,7 +66,7 @@ export default function Product({
                                 color='#41414d'
                                 marginTop='1.2rem'
                             >
-                                {name}
+                                {data.product.name}
                             </Text>
                             <Text
                                 fontSize='2rem'
@@ -78,7 +75,7 @@ export default function Product({
                                 color='#09090A'
                                 marginTop='0.4rem'
                             >
-                                {formatPrice(priceInCents)}
+                                {formatPrice(data.product.priceInCents)}
                             </Text>
                             <Text
                                 fontSize='1.2rem'
@@ -106,7 +103,7 @@ export default function Product({
                                 color='#41414d'
                                 marginTop='0.8rem'
                             >
-                                {description}
+                                {data.product.description}
                             </Text>
                             <AddCartButton>
                                 <FiShoppingBag />
@@ -114,21 +111,8 @@ export default function Product({
                             </AddCartButton>
                         </Descriptions>
                     </Content>
-                ) : (
-                    <Content>
-                        <Text
-                            fontSize='3.2rem'
-                            fontWeight='300'
-                            lineHeight='4.8rem'
-                            color='#41414d'
-                            marginTop='1.2rem'
-                        >
-                            Não foi possível encontrar o produto!
-                        </Text>
-                    </Content>
-                )
+                )   
             }
-            
             </Container>
         </>
     )
@@ -141,15 +125,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
     }
 }
 
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params }): Promise<{
+    props: { dehydratedState: DehydratedState };
+  }> => {
     const { id } = params;
-
-    const { Product } = await client.request(GET_PRODUCT_BY_ID, { "id": id })
-
-    return {
-        props: {
-            ...Product
-        }
-    }
-}
+    const queryClient = new QueryClient();
+    await queryClient.prefetchQuery('@capputeeno:product', () => getProduct(`${id}`));
+    return { props: { dehydratedState: dehydrate(queryClient) } };
+};

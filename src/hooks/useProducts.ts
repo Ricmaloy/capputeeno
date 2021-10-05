@@ -1,5 +1,6 @@
-import client from "../graphql/client";
-import UNIQUE_GET_PRODUCTS from "../graphql/queries/getProducts";
+import { useQuery } from 'react-query';
+import client from '../graphql/client';
+import UNIQUE_GET_PRODUCTS from '../graphql/queries/getProducts';
 
 type FilterOptionProps = 'all' | 't-shirts' | 'mugs';
 type OrderOptionProps = 'news' | 'ascending' | 'descending' | 'topseller' | 'none';
@@ -17,7 +18,7 @@ interface ProductProps {
     count: number,
   }
 
-export async function useProducts(sortField: FilterOptionProps, sortOrder: OrderOptionProps, page: number) {
+export async function getProducts(sortField: FilterOptionProps, sortOrder: OrderOptionProps, page: number): Promise<ProductsProps> {
 
     const formatOrderList = {
         'news' : [ 'created_at', 'DESC' ],
@@ -37,12 +38,16 @@ export async function useProducts(sortField: FilterOptionProps, sortOrder: Order
         sortOrder: formatedOrder[1],
     }
 
-    const { allProducts, _allProductsMeta } =  await client.request(UNIQUE_GET_PRODUCTS, vars);
-
-    const formatedProducts = await allProducts.map(product => product);
+    const { allProducts, _allProductsMeta } = await client.request(UNIQUE_GET_PRODUCTS, vars);
 
     return {
-        products: formatedProducts,
+        products: allProducts,
         count: _allProductsMeta.count
     }
+}
+
+export function useProducts(sortField: FilterOptionProps, sortOrder: OrderOptionProps, page: number) {
+    return useQuery(['@capputeeno:products', sortField, sortOrder, page], () => getProducts(sortField, sortOrder, page), {
+        staleTime: 1000 * 60 * 10
+    })
 }
