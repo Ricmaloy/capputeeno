@@ -1,7 +1,4 @@
-import { useEffect, useState } from "react";
-
-import GET_PRODUCTS from "../graphql/queries/getProducts";
-import client from "../graphql/client";
+import { useState } from "react";
 
 import { FilterNav } from "../components/FilterNav";
 import { Header } from "../components/Header";
@@ -12,48 +9,20 @@ import { ProductsDisplay } from "../components/ProductsDisplay";
 import { useStore } from "../hooks/useStore";
 
 import { formatPagesCount } from "../utils/formatPagesCount";
-import { formatVars } from "../utils/formatVars";
 
 import { Container, FiltersSection } from '../styles/pages/Home';
-
-interface varsProps {
-  page: number,
-  perPage: number,
-  sortFilter: { category: string } | { category?: undefined },
-  sortField: string,
-  sortOrder: string,
-}
+import { useProducts } from "../hooks/useProducts";
 
 export default function Home() {
   const { sortField, sortOrder } = useStore();
-  const [productsList, setProductsList] = useState([]);
   const [selectedPage, setSelectedPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
 
-  async function handleChangePage(newPage: number) {
+  const { data, isLoading, isFetching, error } = useProducts(sortField, sortOrder, selectedPage);
+
+  function handleChangePage(newPage: number) {
 
     setSelectedPage(newPage);
-
-    const updatedVars = formatVars(sortField, sortOrder, newPage);
-    const { allProducts } = await client.request(GET_PRODUCTS, updatedVars);
-
-    setProductsList(allProducts);
-}
-
-async function getData(vars: varsProps) {
-  const { allProducts, _allProductsMeta } =  await client.request(GET_PRODUCTS, vars);
-  
-  setProductsList(allProducts);
-  setTotalPages(formatPagesCount(_allProductsMeta.count));
-}
-
-useEffect(() => {
-  setSelectedPage(0)
-
-  const updatedVars = formatVars(sortField, sortOrder, 0);
-  getData(updatedVars);
-}, [sortOrder, sortField])
-
+  }
 
   return (
     <>
@@ -65,11 +34,21 @@ useEffect(() => {
           <OrderDropdown />
         </FiltersSection>
 
-        <Pagination selectedPage={selectedPage} totalPages={totalPages} handleOnChangePage={handleChangePage}/>
+        {
+          isLoading ? (
+            <h1>carregando</h1>
+          ) : error ? (
+            <h1>Falha ao obter dados</h1>
+          ) : (
+            <>
+            <Pagination selectedPage={selectedPage} totalPages={formatPagesCount(data.count)} handleOnChangePage={handleChangePage}/>
 
-        <ProductsDisplay products={productsList} />
+            <ProductsDisplay products={data.products} />
 
-        <Pagination selectedPage={selectedPage} totalPages={totalPages} handleOnChangePage={handleChangePage}/>
+            <Pagination selectedPage={selectedPage} totalPages={formatPagesCount(data.count)} handleOnChangePage={handleChangePage}/>
+            </>
+          )
+        }
 
       </Container>
     </>
