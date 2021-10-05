@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useStore } from '../../hooks/useStore';
 import { Container, NavList, NavLink } from './styles';
 
 type FilterOptionProps = 'all' | 't-shirts' | 'mugs';
@@ -15,7 +15,7 @@ const filterOptionsList: filterOptionsListProps[] = [
 ]
 
 export function FilterNav() {
-    const [filterCategory, setFilterCategory] = useState<FilterOptionProps>('all')
+    const { handleSetSortField, sortField } = useStore();
 
     return (
         <Container>
@@ -25,8 +25,8 @@ export function FilterNav() {
                         return (
                             <NavLink 
                                 key={option.category}
-                                isActive={option.category === filterCategory}
-                                onClick={() => setFilterCategory(option.category)}
+                                isActive={option.category === sortField}
+                                onClick={() => handleSetSortField(option.category)}
                             >
                                 {option.title}
                             </NavLink>

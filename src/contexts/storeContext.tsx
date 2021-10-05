@@ -14,10 +14,22 @@ interface ProductProps {
     category: string,
 }
 
-interface ProductsProps {
-    products: ProductProps[]
-    count: number,
-    slug: string
+interface varsProps {
+    page: number,
+    perPage: number,
+    sortFilter?: string,
+    sortField?: string,
+    sortOrder?: string,
+}
+
+type FilterOptionProps = 'all' | 't-shirts' | 'mugs';
+type OrderOptionProps = 'news' | 'ascending' | 'descending' | 'topseller' | 'none';
+
+const formatOrderList = {
+    'news' : [ 'created_at', 'DESC' ],
+    'topseller' : [ 'sales', 'DESC' ],
+    'descending' : [ 'price_in_cents', 'DESC' ],
+    'ascending' : [ 'price_in_cents', 'ASC' ]
 }
 
 interface StoreContextData {
@@ -33,12 +45,13 @@ interface StoreContextData {
     handleSetTotalPages: (newTotalPages: number) => void;      
     count: number;
     handleSetCount: (newCount: number) => void;
-    sortField: string;
-    handleSetSortField: (newSortField: string) => void;
-    sortOrder: string;
-    handleSetSortOrder: (newSortOrder: string) => void;
+    sortField: FilterOptionProps;
+    handleSetSortField: (newSortField: FilterOptionProps) => void;
+    sortOrder: OrderOptionProps;
+    handleSetSortOrder: (newSortOrder: OrderOptionProps) => void;
     slug: string;
     handleSetSlug: (newSlug: string) => void;
+    vars: varsProps;
 }
 
 export const StoreContext = createContext({} as StoreContextData);
@@ -49,9 +62,10 @@ export function StoreContextProvider({ children }: StoreContextProviderProps) {
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [count, setCount] = useState(0);
-    const [sortField, setSortField] = useState('');
-    const [sortOrder, setSortOrder] = useState('');
+    const [sortField, setSortField] = useState<FilterOptionProps>('all');
+    const [sortOrder, setSortOrder] = useState<OrderOptionProps>('none');
     const [slug, setSlug] = useState('');
+    const [vars, setVars] = useState({page: 0, perPage: 12})
 
     function handleSetSearchField(searchField: string) {
         setSearchField(searchField);
@@ -73,11 +87,11 @@ export function StoreContextProvider({ children }: StoreContextProviderProps) {
         setCount(newCount)
     }
 
-    function handleSetSortField(newSortField: string) {
+    function handleSetSortField(newSortField: FilterOptionProps) {
         setSortField(newSortField);
     }
 
-    function handleSetSortOrder(newSortOrder: string) {
+    function handleSetSortOrder(newSortOrder: OrderOptionProps) {
         setSortOrder(newSortOrder);
     }
 
@@ -85,8 +99,17 @@ export function StoreContextProvider({ children }: StoreContextProviderProps) {
         setSlug(newSlug);
     }
 
-    async function handleGetProducts() {
+    function handleGetProducts() {
+        const formatedFilter = sortField === 'all' ? {} : { "category": `${sortField}` };
+        const formatedOrder = sortOrder === 'none' ? '' : [...formatOrderList[`${sortOrder}`]];
 
+        const vars = {
+            page: currentPage,
+            perPage: 12,
+            sortFilter: formatedFilter,
+            sortField: formatedOrder[0],
+            sortOrder: formatedOrder[1],
+        }
     }
 
     async function handleGetProduct() {
@@ -114,7 +137,8 @@ export function StoreContextProvider({ children }: StoreContextProviderProps) {
             count,
             sortField,
             sortOrder,
-            slug
+            slug,
+            vars
         }} >
             {children}
         </StoreContext.Provider>

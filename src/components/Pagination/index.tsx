@@ -9,7 +9,7 @@ interface Pagination {
 
 export function Pagination({selectedPage, totalPages, handleOnChangePage}: Pagination) {
 
-    const pages = [... Array(totalPages)].map((_, index) => index + 1);
+    const pages = [... Array(totalPages)].map((_, index) => index);
 
     function handleChangePage(newSelectedPage: number) {
         handleOnChangePage(newSelectedPage);
@@ -18,20 +18,30 @@ export function Pagination({selectedPage, totalPages, handleOnChangePage}: Pagin
     return (
         <Container>
             {
-               pages.map(page => {
-                   return (
-                        <ItemContainer 
-                            key={page} 
-                            isItemSelected={page === selectedPage} 
-                            onClick={() => handleChangePage(page)}
-                        >
-                            {page}
-                        </ItemContainer>
-                   )
-               }) 
+               pages.length > 1 ? (
+                   pages.map(page => {
+                       return (
+                            <ItemContainer 
+                                key={page} 
+                                isItemSelected={page === selectedPage} 
+                                onClick={() => handleChangePage(page)}
+                            >
+                                {page + 1}
+                            </ItemContainer>
+                       )
+                   }) 
+               ) : (
+                    <ItemContainer 
+                        key={0} 
+                        isItemSelected={true} 
+                        onClick={() => handleChangePage(0)}
+                    >
+                        {1}
+                    </ItemContainer>
+                )
             }
-            <ItemContainer onClick={() => handleChangePage(selectedPage - 1)} isItemDisabled={selectedPage === 1} ><FiChevronLeft/></ItemContainer>
-            <ItemContainer onClick={() => handleChangePage(selectedPage + 1)} isItemDisabled={selectedPage === totalPages}><FiChevronRight/></ItemContainer>
+            <ItemContainer onClick={() => handleChangePage(selectedPage - 1)} isItemDisabled={selectedPage === 0} ><FiChevronLeft/></ItemContainer>
+            <ItemContainer onClick={() => handleChangePage(selectedPage + 1)} isItemDisabled={selectedPage + 1 === totalPages}><FiChevronRight/></ItemContainer>
         </Container>
     )
 }

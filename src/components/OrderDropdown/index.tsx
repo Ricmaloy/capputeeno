@@ -1,8 +1,7 @@
-import { useState } from 'react';
-import { FiChevronDown, FiChevronUp } from 'react-icons/fi'
-import { Container, MainLayer, DropDownMenu, MenuItem } from './styles';
+import { useStore } from '../../hooks/useStore';
+import { Container, Select } from './styles';
 
-type OrderOptionProps = 'news' | 'ascending' | 'descending' | 'topseller';
+type OrderOptionProps = 'news' | 'ascending' | 'descending' | 'topseller' | 'none';
 
 interface orderFilterOptionsProps {
     title: string;
@@ -10,6 +9,7 @@ interface orderFilterOptionsProps {
 }
 
 const orderFilterOptions: orderFilterOptionsProps[] = [
+    {title: 'Organizar por', order: 'none'},
     {title: 'Novidades', order: 'news'},
     {title: 'Preço: Maior - menor', order: 'descending'},
     {title: 'Preço: Menor - maior', order: 'ascending'},
@@ -17,37 +17,34 @@ const orderFilterOptions: orderFilterOptionsProps[] = [
 ]
 
 export function OrderDropdown() {
-    const [selectedOrderFilter, setSelectedOrderFilter] = useState('none');
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    function handleOpenDropdown() {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
+    const { handleSetSortOrder } = useStore();
 
     function handleSelectOrderFilter(orderOption: string) {
-        setSelectedOrderFilter(orderOption);
-        setIsDropdownOpen(false);
+        const parsedOrderOption = orderFilterOptions.find(option => option.title === orderOption).order
+        handleSetSortOrder(parsedOrderOption);
     };
 
     return (
         <Container>
-        <MainLayer onClick={handleOpenDropdown} >
-            {orderFilterOptions.find(option => option.order === selectedOrderFilter)?.title || 'Organizar por'}
-            { isDropdownOpen ?  <FiChevronUp/> : <FiChevronDown />}
-        </MainLayer>
-        <DropDownMenu isDropdownMenuOpen={isDropdownOpen} >
+        <Select defaultValue={orderFilterOptions[0].title} onChange={(ev) => handleSelectOrderFilter(ev.target.value)} >
             {
-                orderFilterOptions.map(filterOption => {
-                    return (
-                        <MenuItem 
-                            key={filterOption.order} 
-                            onClick={() => handleSelectOrderFilter(filterOption.order)} 
-                        >
-                            {filterOption.title}
-                        </MenuItem>
-                    )
+                orderFilterOptions.map(option => {
+                    if(option.order === 'none') {
+                        return (
+                            <option key={`SelectOption ${option.order}`} disabled hidden >
+                                {option.title}
+                            </option>
+                        )
+                    } else {
+                        return (
+                            <option key={`SelectOption ${option.order}`}>
+                                {option.title}
+                            </option>
+                        )
+                    }
                 })
             }
-        </DropDownMenu>
+        </Select>
         </Container>
     )
 }

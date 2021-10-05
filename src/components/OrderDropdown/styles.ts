@@ -51,3 +51,19 @@ export const MenuItem = styled.li`
         opacity: 1;
     }
 `
+
+export const Select = styled.select`
+    font-family: Saira;
+    font-size: 1.4rem;
+    
+    color: #737380;
+    padding-right: 2rem;
+    border: none;
+    background-color: transparent;
+
+
+    appearance: none;
+    background-image: url('arrow.png');
+    background-repeat: no-repeat;
+    background-position: 100% 50%;
+`
