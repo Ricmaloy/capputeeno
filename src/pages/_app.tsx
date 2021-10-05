@@ -1,13 +1,22 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { QueryClientProvider } from 'react-query';
+import { useState } from 'react';
+import { QueryClientProvider, QueryClient } from 'react-query';
 
 import { StoreContextProvider } from '../contexts/storeContext';
-import { queryClient } from '../services/react-query/queryClient';
+import { Hydrate } from 'react-query/hydration';
 
 import GlobalStyles from '../styles/global';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [queryClient] = useState(() => new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 1000 * 60 * 10,
+          },
+        },
+    }))
+
   return (
       <>
         <Head>
@@ -19,10 +28,12 @@ function MyApp({ Component, pageProps }: AppProps) {
           />
         </Head>
         <QueryClientProvider client={queryClient} >
-          <StoreContextProvider>
-            <GlobalStyles />
-            <Component {...pageProps} />
-          </StoreContextProvider>
+          <Hydrate state={pageProps.dehydratedState}>
+            <StoreContextProvider>
+              <GlobalStyles />
+              <Component {...pageProps} />
+            </StoreContextProvider>
+          </Hydrate>
         </QueryClientProvider>
       </>
       )

@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+import { dehydrate, DehydratedState } from 'react-query/hydration';
+import { QueryClient } from 'react-query';
+
 import { FilterNav } from "../components/FilterNav";
 import { Header } from "../components/Header";
 import { OrderDropdown } from "../components/OrderDropdown";
@@ -11,7 +14,8 @@ import { useStore } from "../hooks/useStore";
 import { formatPagesCount } from "../utils/formatPagesCount";
 
 import { Container, FiltersSection } from '../styles/pages/Home';
-import { useProducts } from "../hooks/useProducts";
+import { getProducts, useProducts } from "../hooks/useProducts";
+import { GetServerSideProps } from "next";
 
 export default function Home() {
   const { sortField, sortOrder } = useStore();
@@ -54,3 +58,11 @@ export default function Home() {
     </>
   )
 }
+
+export const getServerSideProps: GetServerSideProps = async (): Promise<{
+  props: { dehydratedState: DehydratedState };
+}> => {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery('@capputeeno:products', () => getProducts('all', 'none', 0));
+  return { props: { dehydratedState: dehydrate(queryClient) } };
+};
