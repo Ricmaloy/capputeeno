@@ -1,6 +1,9 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { QueryClientProvider } from 'react-query';
+
 import { StoreContextProvider } from '../contexts/storeContext';
+import { queryClient } from '../services/react-query/queryClient';
 
 import GlobalStyles from '../styles/global';
 
@@ -15,10 +18,12 @@ function MyApp({ Component, pageProps }: AppProps) {
             content="Projeto de desafio front end by Rocketseat"
           />
         </Head>
-        <StoreContextProvider>
-          <GlobalStyles />
-          <Component {...pageProps} />
-        </StoreContextProvider>
+        <QueryClientProvider client={queryClient} >
+          <StoreContextProvider>
+            <GlobalStyles />
+            <Component {...pageProps} />
+          </StoreContextProvider>
+        </QueryClientProvider>
       </>
       )
 }
