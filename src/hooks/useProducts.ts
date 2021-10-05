@@ -1,4 +1,4 @@
-import { useQuery,  } from 'react-query';
+import { useQuery } from 'react-query';
 import client from '../graphql/client';
 import UNIQUE_GET_PRODUCTS from '../graphql/queries/getProducts';
 
@@ -38,7 +38,7 @@ export async function getProducts(sortField: FilterOptionProps, sortOrder: Order
         sortOrder: formatedOrder[1],
     }
 
-    const { allProducts, _allProductsMeta } =  await client.request(UNIQUE_GET_PRODUCTS, vars);
+    const { allProducts, _allProductsMeta } = await client.request(UNIQUE_GET_PRODUCTS, vars);
 
     console.log(allProducts)
 
@@ -50,6 +50,6 @@ export async function getProducts(sortField: FilterOptionProps, sortOrder: Order
 
 export function useProducts(sortField: FilterOptionProps, sortOrder: OrderOptionProps, page: number) {
     return useQuery(['@capputeeno:products', sortField, sortOrder, page], () => getProducts(sortField, sortOrder, page), {
-        staleTime: 1000 * 60 * 10   // 10 minuto
+        staleTime: 1000 * 60 * 10
     })
 }

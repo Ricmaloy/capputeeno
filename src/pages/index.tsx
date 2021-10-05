@@ -54,23 +54,3 @@ export default function Home() {
     </>
   )
 }
-
-// export const getServerSideProps: GetServerSideProps = async () => {
-
-//   const vars = {
-//       page: 0,
-//       perPage: 12,
-//   }
-  
-//   const data = await client.request(GET_PRODUCTS, vars);
-
-//   const { allProducts } = data;
-//   const { count } = data._allProductsMeta;
-
-//   return {
-//       props: {
-//           products: allProducts,
-//           count,
-//       }
-//   }
-// }
