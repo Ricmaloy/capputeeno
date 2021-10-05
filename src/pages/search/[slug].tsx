@@ -1,70 +1,30 @@
-import { GetServerSideProps } from "next"
-import { useEffect, useState } from "react"
-import { Header } from "../../components/Header"
-import { Pagination } from "../../components/Pagination"
-import { ProductsDisplay } from "../../components/ProductsDisplay"
-import client from "../../graphql/client"
-import SEARCH_PRODUCTS from "../../graphql/queries/searchProducts"
-import { Container, Title, Subtitle } from "../../styles/pages/Search"
-import { formatPagesCount } from "../../utils/formatPagesCount"
+import { useState } from 'react';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 
-interface ProductProps {
-    id: string,
-    name: string,
-    imageUrl: string,
-    priceInCents: number,
-    category: string,
-}
+import { dehydrate, DehydratedState } from 'react-query/hydration';
+import { QueryClient } from 'react-query';
 
-interface ProductsProps {
-    products: ProductProps[]
-    count: number,
-    slug: string
-}
+import { Header } from '../../components/Header';
+import { Pagination } from '../../components/Pagination';
+import { ProductsDisplay } from '../../components/ProductsDisplay';
 
-export default function Products({ 
-    products,
-    count,
-    slug
-}: ProductsProps) {
-    const [productsList, setProductsList] = useState(products);
+import { formatPagesCount } from '../../utils/formatPagesCount';
+import { searchProducts, useSearch } from '../../hooks/useSearch';
+import { Container, Title, Subtitle } from '../../styles/pages/Search';
+
+
+export default function Products() {
+    const router = useRouter();
+    const { slug } = router.query;
     const [selectedPage, setSelectedPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(1);
-    const [resultsCount, setResultsCount] = useState(formatPagesCount(count));
 
-    async function handleChangePage(newPage: number) {
-        if(newPage === totalPages) return;
+    function handleChangePage(newPage: number) {
 
         setSelectedPage(newPage);
-
-        const updatedVars = {
-            page: newPage,
-            perPage: 12,
-            sortOrder: '',
-            sortField: slug,
-        }
-
-        const { allProducts } =  await client.request(SEARCH_PRODUCTS, updatedVars);
-
-        setProductsList(allProducts);
     }
 
-    useEffect(() => {
-        async function getData() {
-            const { allProducts, _allProductsMeta } =  await client.request(SEARCH_PRODUCTS, {
-                page: 0,
-                perPage: 12,
-                sortOrder: '',
-                sortField: slug,
-            });
-
-            setProductsList(allProducts);
-            setResultsCount(_allProductsMeta.count);
-            formatPagesCount(_allProductsMeta.count);
-        }
-
-        getData()
-    }, [slug])
+    const { data, isLoading, isFetching, error } = useSearch(0, `${slug}`);
     
     return (
         <>
@@ -72,13 +32,17 @@ export default function Products({
             <Container>
                 <Title>Você pesquisou por: <span>{slug}</span></Title>
                 {
-                    productsList.length > 0 ? (
+                    isLoading ? (
+                        <h1>carregando</h1>
+                    ) : error ? (
+                        <Subtitle>Ops ! Algo deu errado, <span>tente novamente.</span></Subtitle>
+                    ) : data.products.length >  0 ? (
                         <>
-                            <Subtitle>Encontramos <span>{resultsCount}</span> produtos para você !</Subtitle>
+                        <Subtitle>Encontramos <span>{data.count}</span> produtos para você !</Subtitle>
 
-                            <Pagination selectedPage={selectedPage} totalPages={totalPages} handleOnChangePage={handleChangePage} />
-                            <ProductsDisplay products={products} />
-                            <Pagination selectedPage={selectedPage} totalPages={totalPages} handleOnChangePage={handleChangePage} />
+                        <Pagination selectedPage={selectedPage} totalPages={formatPagesCount(data.count)} handleOnChangePage={handleChangePage} />
+                        <ProductsDisplay products={data.products} />
+                        <Pagination selectedPage={selectedPage} totalPages={formatPagesCount(data.count)} handleOnChangePage={handleChangePage} />
                         </>
                     ) : (
                         <Subtitle>Não encontramos nenhum que condiz com sua busca, <span>tente algo diferente.</span></Subtitle>
@@ -89,27 +53,11 @@ export default function Products({
     )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-
+export const getServerSideProps: GetServerSideProps = async ({params}): Promise<{
+    props: { dehydratedState: DehydratedState };
+  }> => {
     const { slug } = params;
-
-    const vars = {
-        page: 0,
-        perPage: 12,
-        sortOrder: '',
-        sortField: slug,
-    }
-    
-    const data = await client.request(SEARCH_PRODUCTS, vars);
-
-    const { allProducts } = data;
-    const { count } = data._allProductsMeta;
-
-    return {
-        props: {
-            products: allProducts,
-            count,
-            slug
-        }
-    }
-}
+    const queryClient = new QueryClient();
+    await queryClient.prefetchQuery('@capputeeno:searches', () => searchProducts(0, `${slug}`));
+    return { props: { dehydratedState: dehydrate(queryClient) } };
+  };
