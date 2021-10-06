@@ -7,6 +7,7 @@ import { StoreContextProvider } from '../contexts/storeContext';
 import { Hydrate } from 'react-query/hydration';
 
 import GlobalStyles from '../styles/global';
+import { CartContextProvider } from '../contexts/cartContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient({
@@ -29,10 +30,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         </Head>
         <QueryClientProvider client={queryClient} >
           <Hydrate state={pageProps.dehydratedState}>
+            <CartContextProvider>
             <StoreContextProvider>
               <GlobalStyles />
               <Component {...pageProps} />
             </StoreContextProvider>
+            </CartContextProvider>
           </Hydrate>
         </QueryClientProvider>
       </>
