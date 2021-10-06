@@ -13,11 +13,13 @@ import { formatPrice } from '../../utils/formatPrice';
 import { FiShoppingBag } from 'react-icons/fi'
 import {  Container, Content, Descriptions, Text, AddCartButton } from '../../styles/pages/Product';
 import { getProduct, useProduct } from '../../hooks/useProduct';
+import { useCart } from '../../hooks/useCart';
 
 export default function Product() {
     const router = useRouter();
     const { id } = router.query;
     const { data, isLoading, isFetching, error } = useProduct(`${id}`);
+    const { addProductToCart } = useCart();
 
     return (
         <>  
@@ -105,7 +107,15 @@ export default function Product() {
                             >
                                 {data.product.description}
                             </Text>
-                            <AddCartButton>
+                            <AddCartButton 
+                                onClick={() => addProductToCart(
+                                    data.product.id, 
+                                    data.product.name, 
+                                    data.product.description,
+                                    data.product.priceInCents,
+                                    data.product.imageUrl,
+                                    )} 
+                            >
                                 <FiShoppingBag />
                                 ADICIONAR AO CARRINHO
                             </AddCartButton>
