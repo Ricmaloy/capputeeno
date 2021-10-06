@@ -36,7 +36,7 @@ export const CheckoutSection = styled.div`
     display: flex;
     justify-content: space-between;
 
-    span {
+    p {
         font-size: 1.6rem;
         font-weight: 400;
         line-height: 2.4;
@@ -134,4 +134,34 @@ export const BagItemsList = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1.6rem;
+`
+
+interface PriceContainerProps {
+    isFreefreight: boolean;
+}
+
+export const PriceContainer = styled.div<PriceContainerProps>`
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    span {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: 	#90EE90;
+        display: none;
+    }
+
+    ${props => props.isFreefreight && `
+        p {
+            font-size: 1.2rem;
+            text-decoration: line-through;
+            opacity: 0.7;
+            line-height: 0px;
+        }
+
+        span {
+            display: block;
+        }
+    `}
 `

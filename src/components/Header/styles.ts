@@ -18,7 +18,7 @@ export const Content = styled.div`
     }
 `
 
-export const Logo = styled.h1`
+export const Logo = styled.div`
     font-size: 4rem;
     font-family: Saira Stencil One;
     font-weight: 400;

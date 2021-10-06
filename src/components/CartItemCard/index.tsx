@@ -1,5 +1,7 @@
 import Image from 'next/image';
+import { useState } from 'react';
 import { FiTrash2 } from 'react-icons/fi';
+import { useCart } from '../../hooks/useCart';
 import { formatPrice } from '../../utils/formatPrice';
 import { Container, Content, Header, Description, Footer, Select } from './styles';
 
@@ -9,6 +11,7 @@ interface CartItemProps {
     description: string,
     imageURL: string,
     price: number,
+    quantity: number,
 }
 
 interface SelectOprionProps {
@@ -16,20 +19,27 @@ interface SelectOprionProps {
     value: number
 }
 
-const selectOptions: SelectOprionProps[] = [
-    {label: '1', value: 1},
-    {label: '2', value: 2},
-    {label: '3', value: 3},
-    {label: '4', value: 4},
-    {label: '5', value: 5},
-    {label: '6', value: 6},
-    {label: '7', value: 7},
-    {label: '8', value: 8},
-    {label: '9', value: 9},
-    {label: '10', value: 10},
-]
-
-export function CartItemCard({id, name, description, imageURL, price}: CartItemProps) {
+export function CartItemCard({id, name, description, imageURL, price, quantity}: CartItemProps) {
+    const { updateProductQuantity, removeProductFromCart } = useCart();
+    const [productQuantity, setProductQuantity] = useState(quantity);
+    
+    function handleChangeProductQuantity(quantity: number) {
+        setProductQuantity(quantity);
+        updateProductQuantity(id, quantity);
+    }
+    
+    const selectOptions: SelectOprionProps[] = [
+        {label: '1', value: 1},
+        {label: '2', value: 2},
+        {label: '3', value: 3},
+        {label: '4', value: 4},
+        {label: '5', value: 5},
+        {label: '6', value: 6},
+        {label: '7', value: 7},
+        {label: '8', value: 8},
+        {label: '9', value: 9},
+        {label: '10', value: 10},
+    ]
 
     return (
         <Container>
@@ -44,7 +54,7 @@ export function CartItemCard({id, name, description, imageURL, price}: CartItemP
                 <Header>
                     <h1>{name}</h1>
 
-                    <button>
+                    <button onClick={() => removeProductFromCart(id)} >
                         <FiTrash2/>
                     </button>
                 </Header>
@@ -52,7 +62,7 @@ export function CartItemCard({id, name, description, imageURL, price}: CartItemP
                     {description}
                 </Description>
                 <Footer>
-                    <Select>
+                    <Select defaultValue={productQuantity}  onChange={(ev) => handleChangeProductQuantity(Number(ev.target.value))} >
                         {
                             selectOptions.map(option => {
                                 return (

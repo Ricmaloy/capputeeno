@@ -1,6 +1,8 @@
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { FiShoppingBag, FiSearch } from 'react-icons/fi';
+import { useCart } from '../../hooks/useCart';
 import { 
     Container, 
     Content,
@@ -13,11 +15,11 @@ import {
 export function Header() {
     const router = useRouter();
     const [searchContent, setSearchContent] = useState('');
+    const { getCartSize } = useCart();
 
     function handleSearchItem(event: FormEvent) {
         event.preventDefault()
 
-        // redirecionar para uma página com os resultados da busca
         router.push(`/search/${searchContent}`);
         setSearchContent('')
     }
@@ -25,7 +27,9 @@ export function Header() {
     return (
         <Container>
             <Content>
-                <Logo onClick={() => router.push('/')}>capputeeno</Logo>
+                <Link href={`/`} passHref>
+                    <Logo>capputeeno</Logo>
+                </Link>
     
                 <UserInteractive>
                     <form onSubmit={handleSearchItem} >
@@ -43,10 +47,16 @@ export function Header() {
                         </button>
                     </SearchBar>
                     </form>
-                    <Bag onClick={() => router.push('/cart')}>
+                    <Link href='/cart' passHref>
+                    <Bag >
                         <FiShoppingBag />
-                        <span>2</span>
+                        {
+                            getCartSize() > 0 && (
+                                <span>{getCartSize()}</span>
+                            )
+                        }
                     </Bag>
+                    </Link>
                 </UserInteractive>
             </Content>
         </Container>
