@@ -22,6 +22,7 @@ interface CartContextProps {
     getCartTotal: () => number;
     updateProductQuantity: (id: string, quantity: number) => void;
     handleBuyProducts: () => void;
+    getIsFreeFreight: () => boolean;
 }
 
 export const CartContext = createContext({} as CartContextProps);
@@ -131,8 +132,13 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
         setCart(newCart);
     }
 
+    function getIsFreeFreight() {
+
+        return getCartTotal() > 90000
+    }
+
     return (
-        <CartContext.Provider value={{cart, addProductToCart, removeProductFromCart, getCartSize, getCartTotal, updateProductQuantity, handleBuyProducts}} >
+        <CartContext.Provider value={{cart, getIsFreeFreight, addProductToCart, removeProductFromCart, getCartSize, getCartTotal, updateProductQuantity, handleBuyProducts}} >
             {children}
         </CartContext.Provider>
     )
