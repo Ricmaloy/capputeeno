@@ -1,5 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { FiShoppingBag, FiSearch } from 'react-icons/fi';
 import { useCart } from '../../hooks/useCart';
 import { 
@@ -26,7 +27,9 @@ export function Header() {
     return (
         <Container>
             <Content>
-                <Logo onClick={() => router.push('/')}>capputeeno</Logo>
+                <Link href={`/`} passHref>
+                    <Logo>capputeeno</Logo>
+                </Link>
     
                 <UserInteractive>
                     <form onSubmit={handleSearchItem} >
@@ -44,7 +47,8 @@ export function Header() {
                         </button>
                     </SearchBar>
                     </form>
-                    <Bag onClick={() => router.push('/cart')}>
+                    <Link href='/cart' passHref>
+                    <Bag >
                         <FiShoppingBag />
                         {
                             getCartSize() > 0 && (
@@ -52,6 +56,7 @@ export function Header() {
                             )
                         }
                     </Bag>
+                    </Link>
                 </UserInteractive>
             </Content>
         </Container>
