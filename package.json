@@ -16,7 +16,9 @@
     "nookies": "^2.5.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-dom-confetti": "^0.2.0",
     "react-icons": "^4.2.0",
+    "react-modal": "^3.14.3",
     "react-query": "^3.25.1",
     "react-toastify": "^8.0.3",
     "styled-components": "^5.3.1"
@@ -26,6 +28,7 @@
     "@types/node": "^16.10.2",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
+    "@types/react-modal": "^3.12.1",
     "@types/styled-components": "^5.1.14",
     "babel-plugin-styled-components": "^1.13.2",
     "eslint": "7.32.0",
