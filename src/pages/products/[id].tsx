@@ -1,25 +1,32 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import client from '../../graphql/client';
-import GET_PRODUCT_BY_ID from '../../graphql/queries/getProductByID';
 import { dehydrate, DehydratedState } from 'react-query/hydration';
 import { QueryClient } from 'react-query';
+import { FiShoppingBag } from 'react-icons/fi'
+import { toast } from 'react-toastify';
 
 import { Header } from '../../components/Header';
 import { BackButton } from '../../components/BackButton';
-
-import { formatPrice } from '../../utils/formatPrice';
-import { FiShoppingBag } from 'react-icons/fi'
-import {  Container, Content, Descriptions, Text, AddCartButton } from '../../styles/pages/Product';
-import { getProduct, useProduct } from '../../hooks/useProduct';
 import { useCart } from '../../hooks/useCart';
+import { getProduct, useProduct } from '../../hooks/useProduct';
+import { formatPrice } from '../../utils/formatPrice';
+import { successIcons, toastOptions } from '../../utils/icons';
+import {  Container, Content, Descriptions, Text, AddCartButton } from '../../styles/pages/Product';
 
 export default function Product() {
     const router = useRouter();
     const { id } = router.query;
     const { data, isLoading, isFetching, error } = useProduct(`${id}`);
     const { addProductToCart } = useCart();
+
+    function handleAddProduct(id: string, name: string, description: string, price: number, image: string) {
+        const firstIcon = Math.floor(Math.random() * successIcons.length);
+        const secondIcon = Math.floor(Math.random() * successIcons.length);
+        toast.success(`${successIcons[firstIcon]} Produto adicionado ! ${successIcons[secondIcon]}`, toastOptions);
+
+        addProductToCart(id, name, description, price, image);
+    }
 
     return (
         <>  
@@ -108,13 +115,13 @@ export default function Product() {
                                 {data.product.description}
                             </Text>
                             <AddCartButton 
-                                onClick={() => addProductToCart(
+                                onClick={() => handleAddProduct(
                                     data.product.id, 
                                     data.product.name, 
                                     data.product.description,
                                     data.product.priceInCents,
                                     data.product.imageUrl,
-                                    )} 
+                                )} 
                             >
                                 <FiShoppingBag />
                                 ADICIONAR AO CARRINHO
