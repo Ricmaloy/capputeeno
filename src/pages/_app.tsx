@@ -35,7 +35,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <CartContextProvider>
             <StoreContextProvider>
               <GlobalStyles />
-              <Component {...pageProps} />
+              <Component suppressHydrationWarning={true} {...pageProps} />
               <ToastContainer />
             </StoreContextProvider>
             </CartContextProvider>
