@@ -1,8 +1,10 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { FiTrash2 } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 import { useCart } from '../../hooks/useCart';
 import { formatPrice } from '../../utils/formatPrice';
+import { failureIcons, infoIcons, toastOptions } from '../../utils/icons';
 import { Container, Content, Header, Description, Footer, Select } from './styles';
 
 interface CartItemProps {
@@ -24,8 +26,20 @@ export function CartItemCard({id, name, description, imageURL, price, quantity}:
     const [productQuantity, setProductQuantity] = useState(quantity);
     
     function handleChangeProductQuantity(quantity: number) {
+        const firstIcon = Math.floor(Math.random() * infoIcons.length);
+        const secondIcon = Math.floor(Math.random() * infoIcons.length);
+        toast.info(`${infoIcons[firstIcon]} Produto atualizado ! ${infoIcons[secondIcon]}`, toastOptions);
+
         setProductQuantity(quantity);
         updateProductQuantity(id, quantity);
+    }
+
+    function handleRemoveProductfromCart(id: string) {
+        const firstIcon = Math.floor(Math.random() * failureIcons.length);
+        const secondIcon = Math.floor(Math.random() * failureIcons.length);
+        toast.error(`${failureIcons[firstIcon]} Produto removido ! ${failureIcons[secondIcon]}`, toastOptions);
+
+        removeProductFromCart(id);
     }
     
     const selectOptions: SelectOprionProps[] = [
@@ -35,10 +49,6 @@ export function CartItemCard({id, name, description, imageURL, price, quantity}:
         {label: '4', value: 4},
         {label: '5', value: 5},
         {label: '6', value: 6},
-        {label: '7', value: 7},
-        {label: '8', value: 8},
-        {label: '9', value: 9},
-        {label: '10', value: 10},
     ]
 
     return (
@@ -54,7 +64,7 @@ export function CartItemCard({id, name, description, imageURL, price, quantity}:
                 <Header>
                     <h1>{name}</h1>
 
-                    <button onClick={() => removeProductFromCart(id)} >
+                    <button onClick={() => handleRemoveProductfromCart(id)} >
                         <FiTrash2/>
                     </button>
                 </Header>

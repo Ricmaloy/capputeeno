@@ -1,9 +1,13 @@
+import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 import { useCart } from '../../hooks/useCart';
 import { Header } from '../../components/Header';
+import { ThanksModal } from '../../components/ThanksModal';
 import { BackButton } from '../../components/BackButton';
 import { CartItemCard } from '../../components/CartItemCard';
 import { formatPrice } from '../../utils/formatPrice';
+import { successIcons, toastOptions } from '../../utils/icons';
 
 import { 
     Container, 
@@ -21,10 +25,20 @@ import {
 
 export default function Cart() {
     const router = useRouter();
-    const { cart, getCartSize, getCartTotal, handleBuyProducts, getIsFreeFreight } = useCart();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { cart, getCartSize, getCartTotal, handleBuyProducts, getIsFreeFreight } = useCart();   
 
     function handleBuyCart() {
+        const firstIcon = Math.floor(Math.random() * successIcons.length);
+        const secondIcon = Math.floor(Math.random() * successIcons.length);
+        toast.success(`${successIcons[firstIcon]} Compra realizada ! ${successIcons[secondIcon]}`, toastOptions);
+
         handleBuyProducts();
+        setIsModalOpen(true);
+    }
+    
+    function handleCloseModal() {
+        setIsModalOpen(false);
         router.push('/');
     }
 
@@ -113,6 +127,8 @@ export default function Cart() {
                     <CheckoutLink>trocas e devoluções</CheckoutLink>
                 </CheckoutContainer>
             </Container>
+            
+            <ThanksModal isModalOpen={isModalOpen} onModalClose={handleCloseModal} />
         </>
     )
 }
