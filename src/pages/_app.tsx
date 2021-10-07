@@ -1,13 +1,15 @@
-import { AppProps } from 'next/app';
-import Head from 'next/head';
 import { useState } from 'react';
+import Head from 'next/head';
+import { AppProps } from 'next/app';
 import { QueryClientProvider, QueryClient } from 'react-query';
-
-import { StoreContextProvider } from '../contexts/storeContext';
 import { Hydrate } from 'react-query/hydration';
 
-import GlobalStyles from '../styles/global';
+import { ToastContainer } from 'react-toastify';
+import { StoreContextProvider } from '../contexts/storeContext';
 import { CartContextProvider } from '../contexts/cartContext';
+
+import GlobalStyles from '../styles/global';
+import 'react-toastify/dist/ReactToastify.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient({
@@ -34,6 +36,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <StoreContextProvider>
               <GlobalStyles />
               <Component {...pageProps} />
+              <ToastContainer />
             </StoreContextProvider>
             </CartContextProvider>
           </Hydrate>
