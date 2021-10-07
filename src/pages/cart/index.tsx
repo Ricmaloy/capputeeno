@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 import { useCart } from '../../hooks/useCart';
 import { Header } from '../../components/Header';
 import { BackButton } from '../../components/BackButton';
@@ -18,12 +19,17 @@ import {
     BagItemsList,
     PriceContainer
 } from '../../styles/pages/Cart';
+import { successIcons, toastOptions } from '../../utils/icons';
 
 export default function Cart() {
     const router = useRouter();
     const { cart, getCartSize, getCartTotal, handleBuyProducts, getIsFreeFreight } = useCart();
 
     function handleBuyCart() {
+        const firstIcon = Math.floor(Math.random() * successIcons.length);
+        const secondIcon = Math.floor(Math.random() * successIcons.length);
+        toast.success(`${successIcons[firstIcon]} Compra realizada ! ${successIcons[secondIcon]}`, toastOptions);
+
         handleBuyProducts();
         router.push('/');
     }
