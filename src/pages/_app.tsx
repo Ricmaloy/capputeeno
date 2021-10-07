@@ -13,12 +13,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 1000 * 60 * 10,
-          },
-        },
-    }))
+    defaultOptions: {
+      queries: {
+        staleTime: 1000 * 60 * 10,
+      },
+    },
+  }))
 
   return (
       <>
