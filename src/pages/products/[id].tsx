@@ -13,6 +13,7 @@ import { getProduct, useProduct } from '../../hooks/useProduct';
 import { formatPrice } from '../../utils/formatPrice';
 import { successIcons, toastOptions } from '../../utils/icons';
 import {  Container, Content, Descriptions, Text, AddCartButton } from '../../styles/pages/Product';
+import { ProductPageShimmer } from '../../components/Shimmers/ProductPageShimmer';
 
 export default function Product() {
     const router = useRouter();
@@ -37,7 +38,7 @@ export default function Product() {
 
             {
                 isLoading ? (
-                    <h1>Carregando</h1>
+                    <ProductPageShimmer />
                 ) : error ? (
                     <Content>
                         <Text
