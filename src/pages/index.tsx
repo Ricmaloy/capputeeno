@@ -17,6 +17,8 @@ import { Container, FiltersSection } from '../styles/pages/Home';
 import { getProducts, useProducts } from "../hooks/useProducts";
 import { GetServerSideProps } from "next";
 
+import { ProductsCardDisplayShimmer } from "../components/Shimmers/ProductsDisplayShimmer";
+
 export default function Home() {
   const { sortField, sortOrder } = useStore();
   const [selectedPage, setSelectedPage] = useState(0);
@@ -40,7 +42,7 @@ export default function Home() {
 
         {
           isLoading ? (
-            <h1>carregando</h1>
+            <ProductsCardDisplayShimmer />
           ) : error ? (
             <h1>Falha ao obter dados</h1>
           ) : (
