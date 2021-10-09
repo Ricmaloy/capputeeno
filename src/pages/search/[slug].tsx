@@ -12,6 +12,7 @@ import { ProductsDisplay } from '../../components/ProductsDisplay';
 import { formatPagesCount } from '../../utils/formatPagesCount';
 import { searchProducts, useSearch } from '../../hooks/useSearch';
 import { Container, Title, Subtitle } from '../../styles/pages/Search';
+import { ProductsCardDisplayShimmer } from '../../components/Shimmers/ProductsDisplayShimmer';
 
 
 export default function Products() {
@@ -33,7 +34,7 @@ export default function Products() {
                 <Title>Você pesquisou por: <span>{slug}</span></Title>
                 {
                     isLoading ? (
-                        <h1>carregando</h1>
+                        <ProductsCardDisplayShimmer />
                     ) : error ? (
                         <Subtitle>Ops ! Algo deu errado, <span>tente novamente.</span></Subtitle>
                     ) : data.products.length >  0 ? (
