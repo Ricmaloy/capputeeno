@@ -1,14 +1,15 @@
+import { memo, useCallback } from "react";
 import { useRouter } from "next/router";
 import { FiArrowLeftCircle } from "react-icons/fi";
 import { BackBtn } from './styles';
 
-export function BackButton() {
+function BackButtonComponent() {
     const router = useRouter();
 
-    function handleGoBack() {
+    const handleGoBack = useCallback(() => {
         router.back();
-    }
-
+    }, [router]);
+    
     return (
         <BackBtn onClick={handleGoBack} >
             <FiArrowLeftCircle/>
@@ -16,3 +17,5 @@ export function BackButton() {
         </BackBtn>
     )
 }
+
+export const BackButton = memo(BackButtonComponent);
