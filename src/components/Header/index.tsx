@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, memo, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { FiShoppingBag, FiSearch } from 'react-icons/fi';
@@ -12,7 +12,7 @@ import {
     SearchBar 
 } from './styles';
 
-export function Header() {
+function HeaderComponent() {
     const router = useRouter();
     const [searchContent, setSearchContent] = useState('');
     const { getCartSize } = useCart();
@@ -62,3 +62,5 @@ export function Header() {
         </Container>
     )
 }
+
+export const Header = memo(HeaderComponent);
