@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useStore } from '../../hooks/useStore';
 import { Container, Select } from './styles';
 
@@ -16,7 +17,7 @@ const orderFilterOptions: orderFilterOptionsProps[] = [
     {title: 'Mais vendidos', order: 'topseller'},
 ]
 
-export function OrderDropdown() {
+function OrderDropdownComponent() {
     const { handleSetSortOrder } = useStore();
 
     function handleSelectOrderFilter(orderOption: string) {
@@ -48,3 +49,5 @@ export function OrderDropdown() {
         </Container>
     )
 }
+
+export const OrderDropdown = memo(OrderDropdownComponent);
