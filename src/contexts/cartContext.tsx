@@ -1,5 +1,8 @@
 import { createContext, ReactNode, useState } from "react";
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import { useMutation } from "react-query";
+import client from "../graphql/client";
+import UPDATE_PRODUCT_SALES from "../graphql/mutations/updateProductSales";
 
 interface CartContextProviderProps {
     children: ReactNode;
@@ -11,12 +14,13 @@ interface ProductProps {
     description: string;
     price: number;
     imageUrl:string;
+    sales: number;
     quantity?: number;
 }
 
 interface CartContextProps {
     cart: ProductProps[];
-    addProductToCart: (id: string, name: string, description: string, price: number, imageUrl: string) => void;
+    addProductToCart: (id: string, name: string, description: string, price: number, imageUrl: string, sales: number) => void;
     removeProductFromCart: (id: string) => void;
     getCartSize: () => number;
     getCartTotal: () => number;
@@ -35,13 +39,14 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
         return cartSaved
     })
 
-    function addProductToCart(id: string, name: string, description: string, price: number, imageUrl: string) {
+    function addProductToCart(id: string, name: string, description: string, price: number, imageUrl: string, sales: number) {
         const product = {
             id: id,
             name: name,
             description: description,
             price: price,
             imageUrl: imageUrl,
+            sales: sales
         }
 
         const isProductInCard = cart.map(item => item.id === id).includes(true);
@@ -98,7 +103,7 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     function getCartTotal(): number {
         const cartTotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
-        return cartTotal
+        return cartTotal;
     }
 
     function updateProductQuantity(id: string, quantity: number) {
@@ -123,6 +128,8 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     }
 
     function handleBuyProducts() {
+        updateProductsSales.mutateAsync();
+
         const newCart = [];
 
         setCookie(null, '@capputeeno:cart', JSON.stringify(newCart), {
@@ -136,6 +143,19 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
 
         return getCartTotal() > 90000
     }
+
+    const updateProductsSales = useMutation(async () => {
+
+        cart.map(async (product) => {
+            const vars = {
+                id: product.id,
+                sales: product.sales + product.quantity,
+            }
+
+            await client.request(UPDATE_PRODUCT_SALES, vars);
+        });
+    })
+
 
     return (
         <CartContext.Provider value={{cart, getIsFreeFreight, addProductToCart, removeProductFromCart, getCartSize, getCartTotal, updateProductQuantity, handleBuyProducts}} >
