@@ -21,12 +21,12 @@ export default function Product() {
     const { data, isLoading, isFetching, error } = useProduct(`${id}`);
     const { addProductToCart } = useCart();
 
-    function handleAddProduct(id: string, name: string, description: string, price: number, image: string) {
+    function handleAddProduct(id: string, name: string, description: string, price: number, image: string, sales: number) {
         const firstIcon = Math.floor(Math.random() * successIcons.length);
         const secondIcon = Math.floor(Math.random() * successIcons.length);
         toast.success(`${successIcons[firstIcon]} Produto adicionado ! ${successIcons[secondIcon]}`, toastOptions);
 
-        addProductToCart(id, name, description, price, image);
+        addProductToCart(id, name, description, price, image, sales);
     }
 
     return (
@@ -122,6 +122,7 @@ export default function Product() {
                                     data.product.description,
                                     data.product.priceInCents,
                                     data.product.imageUrl,
+                                    data.product.sales
                                 )} 
                             >
                                 <FiShoppingBag />
