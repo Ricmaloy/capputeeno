@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useStore } from '../../hooks/useStore';
 import { Container, NavList, NavLink } from './styles';
 
@@ -14,7 +15,7 @@ const filterOptionsList: filterOptionsListProps[] = [
     {title: "Canecas", category: "mugs"},
 ]
 
-export function FilterNav() {
+function FilterNavComponent() {
     const { handleSetSortField, sortField } = useStore();
 
     return (
@@ -37,3 +38,5 @@ export function FilterNav() {
         </Container>
     )
 }
+
+export const FilterNav = memo(FilterNavComponent);
