@@ -1,6 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import Head from 'next/head';
 import { dehydrate, DehydratedState } from 'react-query/hydration';
 import { QueryClient } from 'react-query';
 import { FiShoppingBag } from 'react-icons/fi'
@@ -14,6 +15,8 @@ import { formatPrice } from '../../utils/formatPrice';
 import { successIcons, toastOptions } from '../../utils/icons';
 import {  Container, Content, Descriptions, Text, AddCartButton } from '../../styles/pages/Product';
 import { ProductPageShimmer } from '../../components/Shimmers/ProductPageShimmer';
+import client from '../../graphql/client';
+import GET_TOP_TEN_SALES_PRODUCTS from '../../graphql/queries/getTenTopSalesProducts';
 
 export default function Product() {
     const router = useRouter();
@@ -52,6 +55,10 @@ export default function Product() {
                         </Text>
                     </Content>
                 ) : (
+                    <>
+                    <Head>
+                        <title>{data.product.name} | capputeeno</title>
+                    </Head>
                     <Content>
                         <Image
                             src={`${data.product.imageUrl}`}
@@ -130,6 +137,7 @@ export default function Product() {
                             </AddCartButton>
                         </Descriptions>
                     </Content>
+                    </>
                 )   
             }
             </Container>
@@ -138,8 +146,15 @@ export default function Product() {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+
+    const { allProducts } = await client.request(GET_TOP_TEN_SALES_PRODUCTS);
+
+    const paths = allProducts.map(product => ({
+        params: { id: product.id }
+    }));
+
     return {
-        paths: [],
+        paths: paths,
         fallback: 'blocking'
     }
 }
