@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import { useCart } from '../../hooks/useCart';
@@ -44,6 +45,9 @@ export default function Cart() {
 
     return (
         <>
+            <Head>
+                <title>Carrrinho | capputeeno</title>
+            </Head>
             <Header/>
             <Container>
                 <BagList>
