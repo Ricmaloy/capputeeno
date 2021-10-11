@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 import { dehydrate, DehydratedState } from 'react-query/hydration';
 import { QueryClient } from 'react-query';
@@ -29,6 +30,9 @@ export default function Products() {
     
     return (
         <>
+            <Head>
+                <title>Busca | capputeeno</title>
+            </Head>
             <Header /> 
             <Container>
                 <Title>Você pesquisou por: <span>{slug}</span></Title>
