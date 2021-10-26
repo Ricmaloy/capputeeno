@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const Container = styled.div`
     max-width: 112rem;
@@ -85,4 +85,16 @@ export const AddCartButton = styled.button`
         margin-top: 3.5rem;
     }
 `
+const loadAnimation = keyframes`
+    0% { transform: scale(0); opacity: 1; }
+    100% { transform: scale(0.9); opacity: .3; }
+`
 
+export const Loader = styled.div`
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: rgb(255, 255, 255, 0.5);
+
+    animation: ${loadAnimation} 1s linear infinite;
+`
