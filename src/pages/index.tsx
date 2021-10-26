@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { dehydrate, DehydratedState } from 'react-query/hydration';
 import { QueryClient } from 'react-query';
 
@@ -20,15 +18,8 @@ import { GetServerSideProps } from "next";
 import { ProductsCardDisplayShimmer } from "../components/Shimmers/ProductsDisplayShimmer";
 
 export default function Home() {
-  const { sortField, sortOrder } = useStore();
-  const [selectedPage, setSelectedPage] = useState(0);
-
-  const { data, isLoading, isFetching, error } = useProducts(sortField, sortOrder, selectedPage);
-
-  function handleChangePage(newPage: number) {
-
-    setSelectedPage(newPage);
-  }
+  const { sortField, sortOrder, currentPage, handleChangeProductPage } = useStore();
+  const { data, isLoading, isFetching, error } = useProducts(sortField, sortOrder, currentPage);
 
   return (
     <>
@@ -47,11 +38,11 @@ export default function Home() {
             <h1>Falha ao obter dados</h1>
           ) : (
             <>
-            <Pagination selectedPage={selectedPage} totalPages={formatPagesCount(data.count)} handleOnChangePage={handleChangePage}/>
+            <Pagination totalPages={formatPagesCount(data.count)}/>
 
             <ProductsDisplay products={data.products} />
 
-            <Pagination selectedPage={selectedPage} totalPages={formatPagesCount(data.count)} handleOnChangePage={handleChangePage}/>
+            <Pagination totalPages={formatPagesCount(data.count)}/>
             </>
           )
         }

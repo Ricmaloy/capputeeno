@@ -1,19 +1,14 @@
 import { FiChevronRight, FiChevronLeft } from 'react-icons/fi';
+import { useStore } from '../../hooks/useStore';
 import { Container,ItemContainer } from './styles';
 
 interface Pagination {
-    selectedPage: number,
     totalPages: number,
-    handleOnChangePage: (newPage: number) => void,
 }
 
-export function Pagination({selectedPage, totalPages, handleOnChangePage}: Pagination) {
-
+export function Pagination({totalPages}: Pagination) {
+    const { currentPage, handleChangeProductPage } = useStore();
     const pages = [... Array(totalPages)].map((_, index) => index);
-
-    function handleChangePage(newSelectedPage: number) {
-        handleOnChangePage(newSelectedPage);
-    }
 
     return (
         <Container>
@@ -23,8 +18,8 @@ export function Pagination({selectedPage, totalPages, handleOnChangePage}: Pagin
                        return (
                             <ItemContainer 
                                 key={page} 
-                                isItemSelected={page === selectedPage} 
-                                onClick={() => handleChangePage(page)}
+                                isItemSelected={page === currentPage} 
+                                onClick={() => handleChangeProductPage(page)}
                             >
                                 {page + 1}
                             </ItemContainer>
@@ -34,14 +29,14 @@ export function Pagination({selectedPage, totalPages, handleOnChangePage}: Pagin
                     <ItemContainer 
                         key={0} 
                         isItemSelected={true} 
-                        onClick={() => handleChangePage(0)}
+                        onClick={() => handleChangeProductPage(0)}
                     >
                         {1}
                     </ItemContainer>
                 )
             }
-            <ItemContainer onClick={() => handleChangePage(selectedPage - 1)} isItemDisabled={selectedPage === 0} ><FiChevronLeft/></ItemContainer>
-            <ItemContainer onClick={() => handleChangePage(selectedPage + 1)} isItemDisabled={selectedPage + 1 === totalPages}><FiChevronRight/></ItemContainer>
+            <ItemContainer onClick={() => handleChangeProductPage(currentPage - 1)} isItemDisabled={currentPage === 0} ><FiChevronLeft/></ItemContainer>
+            <ItemContainer onClick={() => handleChangeProductPage(currentPage + 1)} isItemDisabled={currentPage + 1 === totalPages}><FiChevronRight/></ItemContainer>
         </Container>
     )
 }
