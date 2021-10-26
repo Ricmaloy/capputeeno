@@ -18,7 +18,7 @@ import { GetServerSideProps } from "next";
 import { ProductsCardDisplayShimmer } from "../components/Shimmers/ProductsDisplayShimmer";
 
 export default function Home() {
-  const { sortField, sortOrder, currentPage, handleChangeProductPage } = useStore();
+  const { sortField, sortOrder, currentPage } = useStore();
   const { data, isLoading, isFetching, error } = useProducts(sortField, sortOrder, currentPage);
 
   return (
@@ -38,11 +38,11 @@ export default function Home() {
             <h1>Falha ao obter dados</h1>
           ) : (
             <>
-            <Pagination totalPages={formatPagesCount(data.count)}/>
+            <Pagination totalPages={formatPagesCount(data.count)} />
 
             <ProductsDisplay products={data.products} />
 
-            <Pagination totalPages={formatPagesCount(data.count)}/>
+            <Pagination totalPages={formatPagesCount(data.count)} />
             </>
           )
         }
