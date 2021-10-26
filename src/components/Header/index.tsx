@@ -15,7 +15,7 @@ import {
 function HeaderComponent() {
     const router = useRouter();
     const [searchContent, setSearchContent] = useState('');
-    const { getCartSize } = useCart();
+    const { cartSize } = useCart();
 
     function handleSearchItem(event: FormEvent) {
         event.preventDefault()
@@ -51,8 +51,8 @@ function HeaderComponent() {
                     <Bag >
                         <FiShoppingBag />
                         {
-                            getCartSize() > 0 && (
-                                <span>{getCartSize()}</span>
+                            cartSize > 0 && (
+                                <span>{cartSize}</span>
                             )
                         }
                     </Bag>
