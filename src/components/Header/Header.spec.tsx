@@ -9,11 +9,12 @@ jest.mock('next/router');
 describe('Header Component', () => {
     const ctx = {
         cart: [],
+        cartSize: 3,
+        cartTotal: 189.9,
         addProductToCart: jest.fn(),
         removeProductFromCart: jest.fn(),
-        getCartSize: jest.fn(),
-        getCartTotal: jest.fn(),
         updateProductQuantity: jest.fn(),
+        updateCartSize: jest.fn(),
         handleBuyProducts: jest.fn(),
         getIsFreeFreight: jest.fn(),
     }
@@ -29,7 +30,6 @@ describe('Header Component', () => {
     });
 
     it('renders amount of itens', () => {
-        ctx.getCartSize.mockImplementation(() => 3);
 
         const screen = render(
             <CartContext.Provider value={{...ctx}} >
