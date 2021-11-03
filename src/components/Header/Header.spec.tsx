@@ -59,6 +59,6 @@ describe('Header Component', () => {
 
         fireEvent.click(searchButton);
 
-        expect(pushMock).toHaveBeenCalled();
+        expect(pushMock).toHaveBeenCalledWith('/search/');
     })
 })
