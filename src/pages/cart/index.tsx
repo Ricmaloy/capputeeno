@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import { useCart } from '../../hooks/useCart';
@@ -26,7 +27,7 @@ import {
 export default function Cart() {
     const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { cart, getCartSize, getCartTotal, handleBuyProducts, getIsFreeFreight } = useCart();   
+    const { cart, cartSize, cartTotal, handleBuyProducts, getIsFreeFreight } = useCart();   
 
     function handleBuyCart() {
         const firstIcon = Math.floor(Math.random() * successIcons.length);
@@ -44,6 +45,9 @@ export default function Cart() {
 
     return (
         <>
+            <Head>
+                <title>Carrrinho | capputeeno</title>
+            </Head>
             <Header/>
             <Container>
                 <BagList>
@@ -53,8 +57,8 @@ export default function Cart() {
                     <h1>seu carrinho</h1>
 
                     <BagPrice>
-                        <p>Total ({getCartSize()} produtos) </p>
-                        <span>{formatPrice(getCartTotal())}</span>
+                        <p>Total ({cartSize} produtos) </p>
+                        <span>{formatPrice(cartTotal)}</span>
                     </BagPrice>
 
                     <BagItemsList>
@@ -88,7 +92,7 @@ export default function Cart() {
                     <CheckoutTitle>Resumo do Pedido</CheckoutTitle>
                     <CheckoutSection>
                         <p>Subtotal de produtos</p>
-                        <p>{formatPrice(getCartTotal())}</p>
+                        <p>{formatPrice(cartTotal)}</p>
                     </CheckoutSection>
                     <CheckoutSection>
                         <p>Entrega</p>
@@ -104,9 +108,9 @@ export default function Cart() {
                         <h3>Total</h3>
                         {
                             getIsFreeFreight() ? (
-                                <h3>{formatPrice(getCartTotal())}</h3>
+                                <h3>{formatPrice(cartTotal)}</h3>
                             ) : (
-                                <h3>{formatPrice(getCartTotal() + 4000)}</h3>
+                                <h3>{formatPrice(cartTotal + 4000)}</h3>
                             )
                         }
                     </CheckoutSection>
@@ -115,7 +119,6 @@ export default function Cart() {
                         cart.length === 0 ? (
                             <CheckoutButton disabled={true}>Carrinho vazio</CheckoutButton>
                         ) : (
-
                             <CheckoutButton onClick={handleBuyCart}>Finalizar a compra</CheckoutButton>
                         )
                     }

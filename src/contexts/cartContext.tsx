@@ -20,11 +20,12 @@ interface ProductProps {
 
 interface CartContextProps {
     cart: ProductProps[];
+    cartSize: number;
+    cartTotal: number;
     addProductToCart: (id: string, name: string, description: string, price: number, imageUrl: string, sales: number) => void;
     removeProductFromCart: (id: string) => void;
-    getCartSize: () => number;
-    getCartTotal: () => number;
     updateProductQuantity: (id: string, quantity: number) => void;
+    updateCartSize: (newQuantity: number) => void;
     handleBuyProducts: () => void;
     getIsFreeFreight: () => boolean;
 }
@@ -36,8 +37,12 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
 
     const [cart, setCart] = useState<ProductProps[]>(() => { 
         const cartSaved = cookies['@capputeeno:cart'] ?  JSON.parse(cookies['@capputeeno:cart']) : []
-        return cartSaved
-    })
+        return cartSaved;
+    });
+
+    const [cartSize, setCartSize] = useState(() => cart.reduce((acc, product) => product.quantity + acc, 0));
+
+    const [cartTotal, setCartTotal] = useState(() => cart.reduce((acc, product) => (product.quantity * product.price) + acc, 0));
 
     function addProductToCart(id: string, name: string, description: string, price: number, imageUrl: string, sales: number) {
         const product = {
@@ -64,12 +69,12 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
                         ...item
                     }
                 }
-            })
+            });
 
             setCookie(null, '@capputeeno:cart', JSON.stringify(newCart), {
                 path: '/',
                 maxAge: 30 * 24 * 60 * 60,
-            })
+            });
             setCart(newCart);
         } else {
             const newCart = [...cart,  {...product, quantity: 1}]
@@ -77,14 +82,19 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
             setCookie(null, '@capputeeno:cart', JSON.stringify(newCart), {
                 path: '/',
                 maxAge: 30 * 24 * 60 * 60,
-            })
+            });
 
             setCart(newCart);
         }
+
+        setCartSize(cartSize + 1);
+        setCartTotal(cartTotal + price);
     }
 
     function removeProductFromCart(id: string) {
         const newCart = cart.filter(item => item.id !== id);
+        const newCartTotal = newCart.reduce((acc, product) => (product.quantity * product.price) + acc, 0);
+        const itemQuantity = cart.find(item => item.id === id).quantity;
 
         setCookie(null, '@capputeeno:cart', JSON.stringify(newCart), {
             path: '/',
@@ -92,18 +102,8 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
         })
 
         setCart(newCart);
-    }
-
-    function getCartSize(): number {
-        const cartSize = cart.reduce((acc, item) => acc + item.quantity, 0);
-
-        return cartSize;
-    }
-
-    function getCartTotal(): number {
-        const cartTotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-
-        return cartTotal;
+        setCartSize(cartSize - itemQuantity);
+        setCartTotal(newCartTotal);
     }
 
     function updateProductQuantity(id: string, quantity: number) {
@@ -120,11 +120,16 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
             }
         })
 
+        const newCartSize = newCart.reduce((acc, product) => product.quantity + acc, 0);
+        const newCartTotal = newCart.reduce((acc, product) => (product.quantity * product.price) + acc, 0);
+
         setCookie(null, '@capputeeno:cart', JSON.stringify(newCart), {
             path: '/',
             maxAge: 30 * 24 * 60 * 60,
         })
         setCart(newCart);
+        setCartSize(newCartSize);
+        setCartTotal(newCartTotal);
     }
 
     function handleBuyProducts() {
@@ -137,11 +142,17 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
             maxAge: 30 * 24 * 60 * 60,
         })
         setCart(newCart);
+        setCartSize(0);
+        setCartTotal(0);
+    }
+
+    function updateCartSize(newQuantity: number) {
+        setCartSize(newQuantity);
     }
 
     function getIsFreeFreight() {
 
-        return getCartTotal() > 90000
+        return cartTotal > 90000;
     }
 
     const updateProductsSales = useMutation(async () => {
@@ -158,7 +169,17 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
 
 
     return (
-        <CartContext.Provider value={{cart, getIsFreeFreight, addProductToCart, removeProductFromCart, getCartSize, getCartTotal, updateProductQuantity, handleBuyProducts}} >
+        <CartContext.Provider value={{
+            cart, 
+            cartSize, 
+            cartTotal, 
+            updateCartSize, 
+            getIsFreeFreight, 
+            addProductToCart, 
+            removeProductFromCart, 
+            updateProductQuantity, 
+            handleBuyProducts
+        }} >
             {children}
         </CartContext.Provider>
     )

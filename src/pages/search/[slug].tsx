@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 import { dehydrate, DehydratedState } from 'react-query/hydration';
 import { QueryClient } from 'react-query';
@@ -18,17 +18,14 @@ import { ProductsCardDisplayShimmer } from '../../components/Shimmers/ProductsDi
 export default function Products() {
     const router = useRouter();
     const { slug } = router.query;
-    const [selectedPage, setSelectedPage] = useState(0);
-
-    function handleChangePage(newPage: number) {
-
-        setSelectedPage(newPage);
-    }
 
     const { data, isLoading, isFetching, error } = useSearch(0, `${slug}`);
     
     return (
         <>
+            <Head>
+                <title>Busca | capputeeno</title>
+            </Head>
             <Header /> 
             <Container>
                 <Title>Você pesquisou por: <span>{slug}</span></Title>
@@ -41,9 +38,9 @@ export default function Products() {
                         <>
                         <Subtitle>Encontramos <span>{data.count}</span> produtos para você !</Subtitle>
 
-                        <Pagination selectedPage={selectedPage} totalPages={formatPagesCount(data.count)} handleOnChangePage={handleChangePage} />
+                        <Pagination totalPages={formatPagesCount(data.count)} />
                         <ProductsDisplay products={data.products} />
-                        <Pagination selectedPage={selectedPage} totalPages={formatPagesCount(data.count)} handleOnChangePage={handleChangePage} />
+                        <Pagination totalPages={formatPagesCount(data.count)} />
                         </>
                     ) : (
                         <Subtitle>Não encontramos nenhum que condiz com sua busca, <span>tente algo diferente.</span></Subtitle>

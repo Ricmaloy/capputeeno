@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import Head from 'next/head';
 import { dehydrate, DehydratedState } from 'react-query/hydration';
 import { QueryClient } from 'react-query';
 import { FiShoppingBag } from 'react-icons/fi'
@@ -12,8 +14,10 @@ import { useCart } from '../../hooks/useCart';
 import { getProduct, useProduct } from '../../hooks/useProduct';
 import { formatPrice } from '../../utils/formatPrice';
 import { successIcons, toastOptions } from '../../utils/icons';
-import {  Container, Content, Descriptions, Text, AddCartButton } from '../../styles/pages/Product';
+import {  Container, Content, Descriptions, Text, AddCartButton, Loader } from '../../styles/pages/Product';
 import { ProductPageShimmer } from '../../components/Shimmers/ProductPageShimmer';
+import client from '../../graphql/client';
+import GET_TOP_TEN_SALES_PRODUCTS from '../../graphql/queries/getTenTopSalesProducts';
 
 export default function Product() {
     const router = useRouter();
@@ -21,12 +25,21 @@ export default function Product() {
     const { data, isLoading, isFetching, error } = useProduct(`${id}`);
     const { addProductToCart } = useCart();
 
-    function handleAddProduct(id: string, name: string, description: string, price: number, image: string, sales: number) {
-        const firstIcon = Math.floor(Math.random() * successIcons.length);
-        const secondIcon = Math.floor(Math.random() * successIcons.length);
-        toast.success(`${successIcons[firstIcon]} Produto adicionado ! ${successIcons[secondIcon]}`, toastOptions);
+    const [isButtonLoading, setIsButtonLoading] = useState(false);
 
-        addProductToCart(id, name, description, price, image, sales);
+    async function handleAddProduct(id: string, name: string, description: string, price: number, image: string, sales: number) {
+        setIsButtonLoading(true);
+
+    
+            const firstIcon = Math.floor(Math.random() * successIcons.length);
+            const secondIcon = Math.floor(Math.random() * successIcons.length);
+            toast.success(`${successIcons[firstIcon]} Produto adicionado ! ${successIcons[secondIcon]}`, toastOptions);
+    
+            addProductToCart(id, name, description, price, image, sales);
+
+            setTimeout(() => {
+                setIsButtonLoading(false);
+            }, 700);
     }
 
     return (
@@ -52,6 +65,10 @@ export default function Product() {
                         </Text>
                     </Content>
                 ) : (
+                    <>
+                    <Head>
+                        <title>{data.product.name} | capputeeno</title>
+                    </Head>
                     <Content>
                         <Image
                             src={`${data.product.imageUrl}`}
@@ -115,21 +132,32 @@ export default function Product() {
                             >
                                 {data.product.description}
                             </Text>
-                            <AddCartButton 
-                                onClick={() => handleAddProduct(
-                                    data.product.id, 
-                                    data.product.name, 
-                                    data.product.description,
-                                    data.product.priceInCents,
-                                    data.product.imageUrl,
-                                    data.product.sales
-                                )} 
-                            >
-                                <FiShoppingBag />
-                                ADICIONAR AO CARRINHO
-                            </AddCartButton>
+                            
+                            {
+
+                                isButtonLoading ? (
+                                    <AddCartButton>
+                                        <Loader />
+                                    </AddCartButton>
+                                ) : (
+                                    <AddCartButton 
+                                        onClick={() => handleAddProduct(
+                                            data.product.id, 
+                                            data.product.name, 
+                                            data.product.description,
+                                            data.product.priceInCents,
+                                            data.product.imageUrl,
+                                            data.product.sales
+                                        )} 
+                                    >
+                                        <FiShoppingBag />
+                                        ADICIONAR AO CARRINHO
+                                    </AddCartButton>
+                                )
+                            }
                         </Descriptions>
                     </Content>
+                    </>
                 )   
             }
             </Container>
@@ -138,8 +166,15 @@ export default function Product() {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+
+    const { allProducts } = await client.request(GET_TOP_TEN_SALES_PRODUCTS);
+
+    const paths = allProducts.map(product => ({
+        params: { id: product.id }
+    }));
+
     return {
-        paths: [],
+        paths: paths,
         fallback: 'blocking'
     }
 }

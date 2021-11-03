@@ -1,7 +1,10 @@
 ![image](https://user-images.githubusercontent.com/40845824/121069742-3accdb00-c7a4-11eb-87d0-3dc47e433762.png)
 
 
-# 🚀 Front end challenge
+ <h1 align="center">🚀 Front end challenge 🚀</p>
+
+
+# 🧠 Contexto
 
 Bem-vindo(a). Este é o desafio Front end!
 
@@ -14,49 +17,75 @@ Bom desafio!
 
 > ⚠️ **É importante que o seu repo esteja público, caso contrário não iremos conseguir avaliar sua resposta**
 
-# 🧠 Contexto
-
-![Protótipo](https://storage.googleapis.com/xesque-dev/challenge-images/prototipo.png?42)
-
 O desafio será implementar um e-commerce para venda de canecas e camisetas que deverá ter as seguintes funcionalidades:
-- [ ] Catálogo de produtos com paginação
-- [ ] Filtragem produtos por categoria
-- [ ] Busca por nome do produto
-- [ ] Adicionar e remover produtos do carrinho
-- [ ] Finalizar compra
+- [x] Catálogo de produtos com paginação
+- [x] Filtragem produtos por categoria
+- [x] Busca por nome do produto
+- [x] Adicionar e remover produtos do carrinho
+- [x] Finalizar compra
 
-## 📋 Instruções
+#
 
-Chegou a hora de colocar a mão na massa!
+# 🏁 Resultado 
 
-- Siga [esse protótipo](https://www.figma.com/file/rET9F2CeUEJdiVN7JRu993/E-commerce---capputeeno?node-id=680%3A6449)
-- Utilize Next.js e Typescript
-- Faça a estilização com styled-components
-- Utilize o local storage para gerenciar o carrinho
-- Por favor, inclua no README as instruções de instalação do projeto
-- Sinta-se livre para incluir quaisquer observações
-- Consuma nossa **API GraphQL** rodando o comando `yarn start` na pasta `api`
+![Aplicação](public/app.gif)
 
-## ✔️ Critérios de Avaliação
+## ⚙️ Instalação
 
-Além dos requisitos levantados acima, iremos olhar para os seguintes critérios durante a correção do desafio:
+Para inicializar o projeto localmente siga os passos descritos abaixo:
 
-- Gerenciamento de estado
-- Componentização
-- Responsividade
-- Preocupação com usabilidade
-- Preocupação com acessibilidade
-- Testes e2e
-- Padrões de código
-- Padrão de commits (_Conventional_)
+```bash
+# Clone o repositório
+$ git clone https://github.com/Ricmaloy/capputeeno.git
 
-## 😎 Seria legal
-- Fazer deploy na vercel ou em outro local de sua preferência e disponibilizar um link de visualização, se necessário utilize esse servidor para a API GraphQL:  https://rocketseat-frontend-challenge.herokuapp.com/
-- Testes unitários
-- Utilização de cache do Next.js
+# Entre no repositório
+$ cd capputeeno
 
----
+# Instale as dependências
+$ yarn install
 
-_O desafio acima foi cuidadosamente construído para propósitos de avaliação apenas. Já possuimos uma funcionalidade similar na nossa plataforma._
+# Execute a aplicação
+$ yarn start
 
-Made with 💜 at Rocketseat
+# Crie um arquivo .env.local e cole a linha abaixo
+$ NEXT_PUBLIC_API_URL=http://localhost:3333/
+
+# Abra outro terminal e acesse a pasta api
+$ cd capputeeno/api
+
+# Inicie a API GraphQL da pasta api
+$ yarn start
+
+# Acesse a aplicação através da url abaixo
+$ http://localhost:3000
+
+# Caso queira abrir o Playground da API GraphQL acesse a url abaixo
+$ http://localhost:3333
+```
+## 💻 Aplicação
+
+  A aplicação está hospedada na [Vercel](https://vercel.com/) e para acessar basta clicar [aqui](https://capputeeno-ricmaloy.vercel.app/).
+  
+## 📚 Bibliotecas utilizadas
+
+  Algumas bibliotecas foram utilizadas a fim de aprimorar a performance e usabilidade, todas elas estão listadas abaixo:
+  
+  - [Axios](https://www.npmjs.com/package/axios)
+  - [GraphQL Request](https://www.npmjs.com/package/graphql-request)
+  - [Nookies](https://www.npmjs.com/package/nookies)
+  - [React Content Loader](https://www.npmjs.com/package/react-content-loader)
+  - [React DOM Confetti](https://www.npmjs.com/package/react-dom-confetti)
+  - [React Icons](https://www.npmjs.com/package/react-icons)
+  - [React Modal](https://www.npmjs.com/package/react-modal)
+  - [React Query](https://www.npmjs.com/package/react-query)
+  - [React Toastify](https://www.npmjs.com/package/react-toastify)
+
+## 🍻 Contato
+  
+  Qualquer dúvida ou feedback estarei disponível em qualquer uma das redes sociais abaixo:
+  
+<a href = "mailto: ricardozamboni021@gmail.com"><img src="https://img.shields.io/badge/-Gmail-%23EA4335?style=for-the-badge&logo=gmail&logoColor=white" target="_blank" margin-right="10px"></a>
+<a href="https://www.linkedin.com/in/ricardo-zamboni-3906471b3/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a>
+<a href="https://github.com/Ricmaloy" target="_blank"><img src="https://github.com/Alexandrehideki13/Alexandrehideki13/blob/main/GistGithub.jpeg" height=29 target="_blank"></a>
+
+<p align="center">🚀 Never Stop Learning 🚀</p>
