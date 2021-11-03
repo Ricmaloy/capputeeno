@@ -26,7 +26,7 @@ function FilterNavComponent() {
                         return (
                             <NavLink 
                                 key={option.category}
-                                isActive={option.category === sortField}
+                                isactive={option.category === sortField ? 1 : 0}
                                 onClick={() => handleSetSortField(option.category)}
                             >
                                 {option.title}

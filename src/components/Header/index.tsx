@@ -42,14 +42,15 @@ function HeaderComponent() {
                         />
                         <button 
                             type='submit'
+                            aria-label='search button'
                         >
                             <FiSearch />
                         </button>
                     </SearchBar>
                     </form>
                     <Link href='/cart' passHref>
-                    <Bag >
-                        <FiShoppingBag />
+                    <Bag>
+                        <FiShoppingBag aria-label='go to cart page'/>
                         {
                             cartSize > 0 && (
                                 <span>{cartSize}</span>

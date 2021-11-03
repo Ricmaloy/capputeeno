@@ -1,6 +1,8 @@
+import { Group } from "reakit/Group";
+import { Button } from "reakit/Button";
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled(Group)`
     max-width: 112rem;
     height: 100%;
     margin: 2.4rem 0;
@@ -16,14 +18,16 @@ export const Container = styled.div`
 `
 
 interface ItemContainerProps {
-    isItemSelected?: boolean;
-    isItemDisabled?: boolean;
+    isitemselected?: number;
+    isitemdisabled?: number;
 }
 
-export const ItemContainer = styled.div<ItemContainerProps>`
+export const ItemContainer = styled(Button)<ItemContainerProps>`
     width: 3.2rem;
     height: 3.2rem;
 
+    border: none;
+    font-family: Saira, 'Helvetica Neue', sans-serif;
     font-size: 1.6rem;
     background-color: #e9e9f0;
     color: #737380;
@@ -40,7 +44,7 @@ export const ItemContainer = styled.div<ItemContainerProps>`
         filter: brightness(0.95);
     }
 
-    ${props => props.isItemSelected && (
+    ${props => props.isitemselected && (
         `
             background-color: #F5F5FA;
             color: #FFA585;
@@ -52,7 +56,7 @@ export const ItemContainer = styled.div<ItemContainerProps>`
         `
     )}
 
-    ${props => props.isItemDisabled && (
+    ${props => props.isitemdisabled && (
         `
             opacity: 0.25;
             pointer-events: none;

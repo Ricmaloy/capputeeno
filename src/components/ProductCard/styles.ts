@@ -1,11 +1,16 @@
+import { Clickable } from 'reakit/Clickable';
 import styled from 'styled-components';
 
-export const CardContainer = styled.div`
+export const CardContainer = styled(Clickable)`
     background-color: #ffffff;
     border-radius: 8px 8px 4px 4px;
     cursor: pointer;
     overflow: hidden;
     transition: all 0.3s;
+    text-align: left;
+
+    border: none;
+    font-family: Saira, 'Helvetica Neue', sans-serif;
 
     img {
         border-radius: 8px 8px 0px 0px;
@@ -17,7 +22,7 @@ export const CardContainer = styled.div`
         width: 100%;
     }
 
-    &:hover {
+    &:hover, &:focus {
         transform: scale(1.03);
         box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
 
