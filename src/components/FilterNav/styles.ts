@@ -1,3 +1,5 @@
+import { Group } from 'reakit/Group';
+import { Button } from 'reakit/Button';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -13,7 +15,7 @@ export const Container = styled.div`
     }
 `
 
-export const NavList = styled.ul`
+export const NavList = styled(Group)`
     display: flex;
     gap: 3.5rem;
 
@@ -25,14 +27,19 @@ export const NavList = styled.ul`
 `
 
 interface isActiveLink {
-    isActive: boolean;
+    isactive: number;
 }
 
-export const NavLink = styled.li<isActiveLink>`
+export const NavLink = styled(Button)<isActiveLink>`
     text-transform: uppercase;
 
-    font-weight: ${props => props.isActive ? '600' : '400'};
-    color: ${props => props.isActive ? '#41414D' : '#737380'};
-    border-bottom: ${props => props.isActive ? '4px solid #ffa585' : 'none'};
-    cursor: pointer;    
+    border: none;
+    background-color: transparent;
+    font-size: 1.6rem;
+    font-family: Saira, 'Helvetica Neue', sans-serif;
+    font-weight: ${props => props.isactive ? '600' : '400'};
+    color: ${props => props.isactive ? '#41414D' : '#737380'};
+    border-bottom: ${props => props.isactive ? '4px solid #ffa585' : 'none'};
+    cursor: pointer;
+
 `

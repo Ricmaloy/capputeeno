@@ -1,3 +1,4 @@
+import { Button } from 'reakit/Button';
 import styled from 'styled-components';
 
 export const Container = styled.header`
@@ -18,12 +19,14 @@ export const Content = styled.div`
     }
 `
 
-export const Logo = styled.div`
+export const Logo = styled(Button)`
     font-size: 4rem;
     font-family: Saira Stencil One;
     font-weight: 400;
 
     color: #5d5d6d;
+    background-color: transparent;
+    border: none;
     cursor: pointer;
 
     @media(max-width: 780px) {
@@ -36,15 +39,18 @@ export const UserInteractive = styled.div`
     display: flex;
     align-items: center;
 `
-export const Bag = styled.div`
+export const Bag = styled(Button)`
     margin-left:  2.7rem;
     position: relative;
 
     cursor: pointer;
+    border: none;
+    background-color: transparent;
 
     span {
         width: 1.7rem;
         height: 1.7rem;
+        font-size: 1rem;
         background-color: #de3838;
         color: #ffffff;
         padding: .5rem;

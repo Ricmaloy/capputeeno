@@ -27,7 +27,11 @@ export function ProductCard({id, name, image_url, price_in_cents}: ProductCardPr
 
     return (
         <Link href={`/products/${id}`} passHref>
-            <CardContainer onMouseEnter={() => handlePrefetchProduct(id)} >
+            <CardContainer 
+                as='button' 
+                onMouseEnter={() => handlePrefetchProduct(id)}
+                aria-label={`product: ${name}`}
+            >
                 <Image 
                     src={image_url}
                     alt={`Image about the product`}
