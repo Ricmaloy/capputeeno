@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { CartContext } from '../../contexts/cartContext'
-import Cart from '.';
+import Cart from '../../pages/cart';
 
 describe('Cart Page', () => {
     it('renders correctly when cart is empty', () => {
