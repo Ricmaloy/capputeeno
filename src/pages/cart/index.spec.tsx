@@ -1,7 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { useRouter } from 'next/router';
+import { render } from '@testing-library/react';
 import { CartContext } from '../../contexts/cartContext'
-import { mocked } from 'ts-jest/utils';
 import Cart from '.';
 
 describe('Cart Page', () => {
