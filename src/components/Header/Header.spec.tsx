@@ -55,7 +55,7 @@ describe('Header Component', () => {
             </CartContext.Provider> 
         );
 
-        const searchButton = screen.getByRole('button');
+        const searchButton = screen.getByRole('button', { name: 'search button' });
 
         fireEvent.click(searchButton);
 
