@@ -98,7 +98,8 @@ export default function Cart() {
                         <p>Entrega</p>
                         <PriceContainer isFreefreight={getIsFreeFreight()} >
                             <p>R$ 40,00</p>
-                            <span>gratuito</span>
+                            {getIsFreeFreight() && <span aria-label='Cart free freight'>gratuito</span>}
+                            
                         </PriceContainer>
                     </CheckoutSection>
 
@@ -108,9 +109,13 @@ export default function Cart() {
                         <h3>Total</h3>
                         {
                             getIsFreeFreight() ? (
-                                <h3>{formatPrice(cartTotal)}</h3>
+                                <h3
+                                    aria-label="Cart total price with free freight"
+                                >{formatPrice(cartTotal)}</h3>
                             ) : (
-                                <h3>{formatPrice(cartTotal + 4000)}</h3>
+                                <h3 
+                                    aria-label="Cart total price without free freight"
+                                >{formatPrice(cartTotal + 4000)}</h3>
                             )
                         }
                     </CheckoutSection>
