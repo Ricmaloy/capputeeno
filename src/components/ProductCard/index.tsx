@@ -17,8 +17,9 @@ interface ProductCardProps {
 export function ProductCard({id, name, image_url, price_in_cents}: ProductCardProps) {
 
     async function handlePrefetchProduct(productId: string) {
+        axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
+        axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
         await queryClient.prefetchQuery(['@capputeeno:product', productId], async () => {
-            axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
             const response = await api.get(`products/${productId}`);
 
             return response.data
