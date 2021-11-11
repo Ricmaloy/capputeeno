@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import Link from 'next/link';
-import axios from 'axios';
 import { api } from '../../services/axios/api';
 import { queryClient } from '../../services/react-query/queryClient';
 import { formatPrice } from '../../utils/formatPrice';
@@ -17,8 +16,8 @@ interface ProductCardProps {
 export function ProductCard({id, name, image_url, price_in_cents}: ProductCardProps) {
 
     async function handlePrefetchProduct(productId: string) {
-        axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
-        axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+        api.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
+        api.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
         await queryClient.prefetchQuery(['@capputeeno:product', productId], async () => {
             const response = await api.get(`products/${productId}`);
 
