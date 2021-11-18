@@ -10,7 +10,6 @@ interface orderFilterOptionsProps {
 }
 
 const orderFilterOptions: orderFilterOptionsProps[] = [
-    {title: 'Organizar por', order: 'none'},
     {title: 'Novidades', order: 'news'},
     {title: 'Preço: Maior - menor', order: 'descending'},
     {title: 'Preço: Menor - maior', order: 'ascending'},
@@ -27,25 +26,18 @@ function OrderDropdownComponent() {
 
     return (
         <Container>
-        <Select defaultValue={orderFilterOptions[0].title} onChange={(ev) => handleSelectOrderFilter(ev.target.value)} >
-            {
-                orderFilterOptions.map(option => {
-                    if(option.order === 'none') {
+            <Select defaultValue={orderFilterOptions[0].title} onChange={(ev) => handleSelectOrderFilter(ev.target.value)} >
+                <option disabled hidden >Selecione a ordem</option>
+                {
+                    orderFilterOptions.map(option => {
                         return (
-                            <option key={`SelectOption ${option.order}`} disabled hidden >
+                            <option key={option.title}>
                                 {option.title}
                             </option>
                         )
-                    } else {
-                        return (
-                            <option key={`SelectOption ${option.order}`}>
-                                {option.title}
-                            </option>
-                        )
-                    }
-                })
-            }
-        </Select>
+                    })
+                }
+            </Select>
         </Container>
     )
 }

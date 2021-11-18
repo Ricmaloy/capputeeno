@@ -8,46 +8,40 @@ interface ThanksModalProps {
     onModalClose: () => void;
 }
 
+const modalStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+  overlay: {
+      backgroundColor: 'rgba(255, 255, 255, 0.65)'
+  }
+};
+
+const confettiStyles = {
+  angle: 105,
+  spread: 330,
+  startVelocity: 40,
+  elementCount: 200,
+  dragFriction: 0.12,
+  duration: 3330,
+  stagger: 3,
+  width: "10px",
+  height: "10px",
+  perspective: "500px",
+  colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]
+}
+
 function ThanksModalComponent({ isModalOpen, onModalClose }: ThanksModalProps) {
-
-    const modalStyles = useMemo(() => {
-        return {
-            content: {
-              top: '50%',
-              left: '50%',
-              right: 'auto',
-              bottom: 'auto',
-              marginRight: '-50%',
-              transform: 'translate(-50%, -50%)',
-            },
-            overlay: {
-                backgroundColor: 'rgba(255, 255, 255, 0.65)'
-            }
-        };
-
-    }, []);
-    
-    const confettiStyles = useMemo(() => {
-        return {
-            angle: 105,
-            spread: 330,
-            startVelocity: 40,
-            elementCount: 200,
-            dragFriction: 0.12,
-            duration: 3330,
-            stagger: 3,
-            width: "10px",
-            height: "10px",
-            perspective: "500px",
-            colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]
-        }
-    }, []);
-
     return (
         <Container>
-        <ConfettiContainer>
-            <Confetti active={isModalOpen}  config={ confettiStyles } />
-        </ConfettiContainer>
+          <ConfettiContainer>
+            <Confetti active={isModalOpen} config={confettiStyles } />
+          </ConfettiContainer>
         <Modal
             isOpen={isModalOpen}
             style={modalStyles}
