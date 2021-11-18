@@ -42,14 +42,7 @@ export function CartItemCard({id, name, description, imageURL, price, quantity}:
         removeProductFromCart(id);
     }
     
-    const selectOptions: SelectOprionProps[] = [
-        {label: '1', value: 1},
-        {label: '2', value: 2},
-        {label: '3', value: 3},
-        {label: '4', value: 4},
-        {label: '5', value: 5},
-        {label: '6', value: 6},
-    ]
+    const selectOptions = Array.from({ length: 6 }).fill((_, i) => i)
 
     return (
         <Container>
@@ -74,7 +67,7 @@ export function CartItemCard({id, name, description, imageURL, price, quantity}:
                 <Footer>
                     <Select defaultValue={productQuantity}  onChange={(ev) => handleChangeProductQuantity(Number(ev.target.value))} >
                         {
-                            selectOptions.map(option => {
+                            selectOptions.map(() => {
                                 return (
                                     <option key={`SelectOption ${option.label}`}>
                                         {option.value}

@@ -26,8 +26,8 @@ import {
 
 export default function Cart() {
     const router = useRouter();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const { cart, cartSize, cartTotal, handleBuyProducts, getIsFreeFreight } = useCart();   
+    const [isThanksModalOpen, setIsThanksModalOpen] = useState(false);
+    const { cart, cartSize, cartTotal, handleBuyProducts, isFreeFreight } = useCart();   
 
     function handleBuyCart() {
         const firstIcon = Math.floor(Math.random() * successIcons.length);
@@ -35,11 +35,11 @@ export default function Cart() {
         toast.success(`${successIcons[firstIcon]} Compra realizada ! ${successIcons[secondIcon]}`, toastOptions);
 
         handleBuyProducts();
-        setIsModalOpen(true);
+        setIsThanksModalOpen(true);
     }
     
     function handleCloseModal() {
-        setIsModalOpen(false);
+        setIsThanksModalOpen(false);
         router.push('/');
     }
 
@@ -96,9 +96,9 @@ export default function Cart() {
                     </CheckoutSection>
                     <CheckoutSection>
                         <p>Entrega</p>
-                        <PriceContainer isFreefreight={getIsFreeFreight()} >
+                        <PriceContainer isFreefreight={isFreeFreight} >
                             <p>R$ 40,00</p>
-                            {getIsFreeFreight() && <span aria-label='Cart free freight'>gratuito</span>}
+                            {isFreeFreight && <span aria-label='Cart free freight'>gratuito</span>}
                             
                         </PriceContainer>
                     </CheckoutSection>
@@ -108,7 +108,7 @@ export default function Cart() {
                     <CheckoutSection>
                         <h3>Total</h3>
                         {
-                            getIsFreeFreight() ? (
+                            isFreeFreight ? (
                                 <h3
                                     aria-label="Cart total price with free freight"
                                 >{formatPrice(cartTotal)}</h3>
@@ -122,7 +122,7 @@ export default function Cart() {
 
                     {
                         cart.length === 0 ? (
-                            <CheckoutButton disabled={true}>Carrinho vazio</CheckoutButton>
+                            <CheckoutButton disabled>Carrinho vazio</CheckoutButton>
                         ) : (
                             <CheckoutButton onClick={handleBuyCart}>Finalizar a compra</CheckoutButton>
                         )
@@ -136,7 +136,7 @@ export default function Cart() {
                 </CheckoutContainer>
             </Container>
             
-            <ThanksModal isModalOpen={isModalOpen} onModalClose={handleCloseModal} />
+            <ThanksModal isModalOpen={isThanksModalOpen} onModalClose={handleCloseModal} />
         </>
     )
 }
