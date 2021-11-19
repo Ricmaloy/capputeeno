@@ -6,30 +6,29 @@ import { BackButton } from '.';
 jest.mock('next/router');
 
 describe('Button Component', () => {
+  it('should render correctly', () => {
+    render(<BackButton />);
 
-    it('should render correctly', () => {
-        render(<BackButton />);
-        
-        expect(screen.getByText('Voltar')).toBeInTheDocument();
-    });
+    expect(screen.getByText('Voltar')).toBeInTheDocument();
+  });
 
-    it('should goes back when clicked', () => {
-        const useRouterMocked = mocked(useRouter);
+  it('should goes back when clicked', () => {
+    const useRouterMocked = mocked(useRouter);
 
-        const pushMock = jest.fn();
-        const backMock = jest.fn();
+    const pushMock = jest.fn();
+    const backMock = jest.fn();
 
-        useRouterMocked.mockReturnValueOnce({
-            push: pushMock,
-            back: backMock
-        } as any)
+    useRouterMocked.mockReturnValueOnce({
+      push: pushMock,
+      back: backMock,
+    } as never);
 
-        render(<BackButton />);
+    render(<BackButton />);
 
-        const backButton = screen.getByText('Voltar');
+    const backButton = screen.getByText('Voltar');
 
-        fireEvent.click(backButton);
-        
-        expect(backMock).toHaveBeenCalled();
-    });
-})
+    fireEvent.click(backButton);
+
+    expect(backMock).toHaveBeenCalled();
+  });
+});

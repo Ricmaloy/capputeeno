@@ -5,38 +5,36 @@ import { Container, NavList, NavLink } from './styles';
 type FilterOptionProps = 'all' | 't-shirts' | 'mugs';
 
 interface filterOptionsListProps {
-    title: string,
-    category: FilterOptionProps
+  title: string;
+  category: FilterOptionProps;
 }
 
 const filterOptionsList: filterOptionsListProps[] = [
-    {title: "Todos os Produtos", category: "all"},
-    {title: "Camisetas", category: "t-shirts"},
-    {title: "Canecas", category: "mugs"},
-]
+  { title: 'Todos os Produtos', category: 'all' },
+  { title: 'Camisetas', category: 't-shirts' },
+  { title: 'Canecas', category: 'mugs' },
+];
 
 function FilterNavComponent() {
-    const { handleSetSortField, sortField } = useStore();
+  const { handleSetSortField, sortField } = useStore();
 
-    return (
-        <Container>
-            <NavList>
-                {
-                    filterOptionsList.map(option => {
-                        return (
-                            <NavLink 
-                                key={option.category}
-                                isactive={option.category === sortField ? 1 : 0}
-                                onClick={() => handleSetSortField(option.category)}
-                            >
-                                {option.title}
-                            </NavLink>
-                        )
-                    })
-                }
-            </NavList>
-        </Container>
-    )
+  return (
+    <Container>
+      <NavList>
+        {filterOptionsList.map((option) => {
+          return (
+            <NavLink
+              key={option.category}
+              isactive={option.category === sortField ? 1 : 0}
+              onClick={() => handleSetSortField(option.category)}
+            >
+              {option.title}
+            </NavLink>
+          );
+        })}
+      </NavList>
+    </Container>
+  );
 }
 
 export const FilterNav = memo(FilterNavComponent);

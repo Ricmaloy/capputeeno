@@ -5,87 +5,94 @@ import { toast } from 'react-toastify';
 import { useCart } from '../../hooks/useCart';
 import { formatPrice } from '../../utils/formatPrice';
 import { failureIcons, infoIcons, toastOptions } from '../../utils/icons';
-import { Container, Content, Header, Description, Footer, Select } from './styles';
+import {
+  Container,
+  Content,
+  Header,
+  Description,
+  Footer,
+  Select,
+} from './styles';
 
 interface CartItemProps {
-    id: string,
-    name: string,
-    description: string,
-    imageURL: string,
-    price: number,
-    quantity: number,
+  id: string;
+  name: string;
+  description: string;
+  imageURL: string;
+  price: number;
+  quantity: number;
 }
 
-interface SelectOprionProps {
-    label: string,
-    value: number
-}
+export function CartItemCard({
+  id,
+  name,
+  description,
+  imageURL,
+  price,
+  quantity,
+}: CartItemProps) {
+  const { updateProductQuantity, removeProductFromCart } = useCart();
+  const [productQuantity, setProductQuantity] = useState(quantity);
 
-export function CartItemCard({id, name, description, imageURL, price, quantity}: CartItemProps) {
-    const { updateProductQuantity, removeProductFromCart } = useCart();
-    const [productQuantity, setProductQuantity] = useState(quantity);
-    
-    function handleChangeProductQuantity(quantity: number) {
-        const firstIcon = Math.floor(Math.random() * infoIcons.length);
-        const secondIcon = Math.floor(Math.random() * infoIcons.length);
-        toast.info(`${infoIcons[firstIcon]} Produto atualizado ! ${infoIcons[secondIcon]}`, toastOptions);
+  function handleChangeProductQuantity(quantity: number) {
+    const firstIcon = Math.floor(Math.random() * infoIcons.length);
+    const secondIcon = Math.floor(Math.random() * infoIcons.length);
+    toast.info(
+      `${infoIcons[firstIcon]} Produto atualizado ! ${infoIcons[secondIcon]}`,
+      toastOptions,
+    );
 
-        setProductQuantity(quantity);
-        updateProductQuantity(id, quantity);
-    }
+    setProductQuantity(quantity);
+    updateProductQuantity(id, quantity);
+  }
 
-    function handleRemoveProductfromCart(id: string) {
-        const firstIcon = Math.floor(Math.random() * failureIcons.length);
-        const secondIcon = Math.floor(Math.random() * failureIcons.length);
-        toast.error(`${failureIcons[firstIcon]} Produto removido ! ${failureIcons[secondIcon]}`, toastOptions);
+  function handleRemoveProductfromCart(id: string) {
+    const firstIcon = Math.floor(Math.random() * failureIcons.length);
+    const secondIcon = Math.floor(Math.random() * failureIcons.length);
+    toast.error(
+      `${failureIcons[firstIcon]} Produto removido ! ${failureIcons[secondIcon]}`,
+      toastOptions,
+    );
 
-        removeProductFromCart(id);
-    }
-    
-    const selectOptions: SelectOprionProps[] = [
-        {label: '1', value: 1},
-        {label: '2', value: 2},
-        {label: '3', value: 3},
-        {label: '4', value: 4},
-        {label: '5', value: 5},
-        {label: '6', value: 6},
-    ]
+    removeProductFromCart(id);
+  }
 
-    return (
-        <Container>
-            <Image 
-                src={imageURL}
-                alt={description}
-                width='256px'
-                height='211px'
-                objectFit='cover'
-            />
-            <Content>
-                <Header>
-                    <h1>{name}</h1>
+  const newSelectOptions = Array.from({ length: 6 }, (_, i) => i + 1);
 
-                    <button onClick={() => handleRemoveProductfromCart(id)} >
-                        <FiTrash2/>
-                    </button>
-                </Header>
-                <Description>
-                    {description}
-                </Description>
-                <Footer>
-                    <Select defaultValue={productQuantity}  onChange={(ev) => handleChangeProductQuantity(Number(ev.target.value))} >
-                        {
-                            selectOptions.map(option => {
-                                return (
-                                    <option key={`SelectOption ${option.label}`}>
-                                        {option.value}
-                                    </option>
-                                )
-                            })
-                        }
-                    </Select>
-                    <h3>{formatPrice(price)}</h3>
-                </Footer>
-            </Content>
-        </Container>
-    )
+  return (
+    <Container>
+      <Image
+        src={imageURL}
+        alt={description}
+        width="256px"
+        height="211px"
+        objectFit="cover"
+      />
+      <Content>
+        <Header>
+          <h1>{name}</h1>
+
+          <button onClick={() => handleRemoveProductfromCart(id)}>
+            <FiTrash2 />
+          </button>
+        </Header>
+        <Description>{description}</Description>
+        <Footer>
+          <Select
+            defaultValue={productQuantity}
+            onChange={(ev) =>
+              handleChangeProductQuantity(Number(ev.target.value))
+            }
+          >
+            {newSelectOptions.map((_, i: number) => {
+              return (
+                <option key={newSelectOptions[i]}>{newSelectOptions[i]}</option>
+              );
+            })}
+          </Select>
+          <h3>{formatPrice(price)}</h3>
+        </Footer>
+      </Content>
+    </Container>
+  );
 }
